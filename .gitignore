@@ -28,3 +28,38 @@ lib/mesh_renderer/build
 lib/utils/extend_utils/src/CMakeFiles
 lib/utils/extend_utils/src/CMakeCache.txt
 ceres/
+
+# checkpoints
+*.pth
+*.pt
+checkpoints/
+models/
+
+# logs
+*.log
+logs/
+runs/
+tensorboard/
+
+# experiment outputs
+experiments/*/checkpoint/
+experiments/*/tensorboard/
+
+# datasets
+data/
+
+# temporary files
+*.npy
+*.npz
+
+# visualization
+*.png
+*.jpg
+
+# python cache
+__pycache__/
+*.pyc
+
+# compiled cuda
+*.so
+build/
