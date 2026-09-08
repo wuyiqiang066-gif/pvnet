@@ -17,7 +17,7 @@ from PIL import Image, ImageFile
 from lib.utils.config import cfg
 from lib.utils.extend_utils.extend_utils import farthest_point_sampling
 from lib.utils.base_utils import read_pickle, save_pickle, Projector, PoseTransformer, read_pose, ModelAligner
-from scipy.misc import imread,imsave
+from imageio import imread,imsave
 from lib.utils.draw_utils import write_points, pts_to_img_pts, img_pts_to_pts_img
 
 

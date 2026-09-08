@@ -72,7 +72,7 @@ at::Tensor generate_hypothesis_launcher(
     dim3 bdim(bdim0,bdim1,bdim2);
     dim3 tdim(tdim0,tdim1,tdim2);
 
-    auto hypo_pts = at::zeros({hn,vn,2}, direct.type());
+    auto hypo_pts = at::zeros({hn,vn,2}, direct.options());
     generate_hypothesis_kernel<<<bdim,tdim>>>(
         direct.data<float>(),
         coords.data<float>(),
@@ -252,7 +252,7 @@ at::Tensor generate_hypothesis_vanishing_point_launcher(
     dim3 bdim(bdim0,bdim1,bdim2);
     dim3 tdim(tdim0,tdim1,tdim2);
 
-    auto hypo_pts = at::zeros({hn,vn,3}, direct.type());
+    auto hypo_pts = at::zeros({hn,vn,3}, direct.options());
     generate_hypothesis_vanishing_point_kernel<<<bdim,tdim>>>(
         direct.data<float>(),
         coords.data<float>(),

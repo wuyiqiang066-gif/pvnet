@@ -1,0 +1,18 @@
+/home/cetc2028/miniconda3/envs/pvnet/lib/python3.12/site-packages/torch/nn/modules/loss.py:44: UserWarning: size_average and reduce args will be deprecated, please use reduction='none' instead.
+  self.reduction: str = _Reduction.legacy_get_string(size_average, reduce)
+/home/cetc2028/miniconda3/envs/pvnet/lib/python3.12/site-packages/torch/cuda/__init__.py:435: UserWarning: 
+    Found GPU0 NVIDIA GB10 which is of cuda capability 12.1.
+    Minimum and Maximum cuda capability supported by this version of PyTorch is
+    (8.0) - (12.0)
+    
+  queued_call()
+/home/cetc2028/wyq/study/pvnet-master/lib/utils/evaluation_utils.py:140: RuntimeWarning: invalid value encountered in arccos
+  angular_distance = np.rad2deg(np.arccos((trace - 1.) / 2.))
+motion state False
+load model /home/cetc2028/wyq/study/pvnet-master/data/model/cat_linemod_train epoch 199
+testing normal linemod ...
+test epoch 200 step 200 seg 0.00209995  ver 0.00187920  precision 0.95673984  recall 0.96241742  projection_error 0.99800399  add 0.80638723  cm 0.98203593 
+epoch 200 test cost 65.67039728164673 s
+testing occluded linemod ...
+occ_test epoch 200 step 200 seg 0.00688716  ver 0.04448914  precision 0.89711672  recall 0.68877393  projection_error 0.59561921  add 0.16849200  cm 0.15922494 
+epoch 200 occ_test cost 65.97274518013 s

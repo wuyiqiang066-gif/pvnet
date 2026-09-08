@@ -172,10 +172,10 @@ class Recorder(object):
               [119,  11,  32]]
 
     def __init__(self, rec=True, rec_dir=None, dump_fn=None):
-        from matplotlib import cm
+        import matplotlib
         if rec:
             self.writer = SummaryWriter(log_dir=rec_dir)
-            self.cmap = cm.get_cmap()
+            self.cmap = matplotlib.colormaps['viridis']
         else:
             self.writer = None
 

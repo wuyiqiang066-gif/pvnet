@@ -508,7 +508,7 @@ def b_inv(b_mat):
     :return:
     '''
     eye = b_mat.new_ones(b_mat.size(-1)).diag().expand_as(b_mat)
-    b_inv, _ = torch.gesv(eye, b_mat)
+    b_inv = torch.linalg.solve(b_mat, eye)
     return b_inv
 
 def ransac_voting_layer_v3(mask, vertex, round_hyp_num, inlier_thresh=0.999, confidence=0.99, max_iter=20,
@@ -524,7 +524,7 @@ def ransac_voting_layer_v3(mask, vertex, round_hyp_num, inlier_thresh=0.999, con
     batch_win_pts = []
     for bi in range(b):
         hyp_num = 0
-        cur_mask = (mask[bi]).byte()
+        cur_mask = (mask[bi]).bool()
         foreground_num = torch.sum(cur_mask)
 
         # if too few points, just skip it
@@ -611,7 +611,7 @@ def ransac_voting_center(mask, vertex, round_hyp_num, inlier_thresh=0.99, confid
     batch_instance_num = []
     for bi in range(b):
         hyp_num = 0
-        cur_mask = (mask[bi]).byte()
+        cur_mask = (mask[bi]).bool()
         foreground_num = torch.sum(cur_mask)
 
         # if too few points, just skip it
@@ -680,7 +680,7 @@ def ransac_voting_layer_v4(mask, vertex, round_hyp_num, inlier_thresh=0.99, conf
     batch_var = []
     for bi in range(b):
         hyp_num = 0
-        cur_mask = (mask[bi]).byte()
+        cur_mask = (mask[bi]).bool()
         foreground_num = torch.sum(cur_mask)
 
         # if too few points, just skip it
@@ -773,7 +773,7 @@ def ransac_voting_layer_v5(mask, vertex, round_hyp_num, inlier_thresh=0.999, con
     batch_win_pts, batch_confidence = [], []
     for bi in range(b):
         hyp_num = 0
-        cur_mask = (mask[bi]).byte()
+        cur_mask = (mask[bi]).bool()
         foreground_num = torch.sum(cur_mask)
 
         # if too few points, just skip it
@@ -868,14 +868,14 @@ def ransac_voting_layer_v6(mask, vertex, round_hyp_num, inlier_thresh=0.999, con
     '''
     b, h, w, vn, _ = vertex.shape
     batch_win_pts, batch_confidence = [], []
-    mask2=mask.byte()
+    mask2=mask.bool()
     print(mask2.device)
     val=torch.sum(mask2)
     for bi in range(b):
         hyp_num = 0
 
         foreground_num = torch.sum(mask)
-        cur_mask = mask.byte()[bi]
+        cur_mask = mask.bool()[bi]
 
         # if too few points, just skip it
         if foreground_num < min_num:
@@ -967,7 +967,7 @@ def ransac_motion_voting(mask, vertex):
     b, h, w, vn, _ = vertex.shape
     pts=[]
     for bi in range(b):
-        cur_mask=mask[bi].byte()
+        cur_mask=mask[bi].bool()
         coords=torch.nonzero(cur_mask).float()
         if coords.shape[0]<1:
             pts.append(torch.zeros([1,vn,2],dtype=torch.float32,device=vertex.device))
@@ -994,7 +994,7 @@ def generate_hypothesis(mask, vertex, round_hyp_num, inlier_thresh=0.999, confid
     batch_hyp_counts = []
     for bi in range(b):
         hyp_num = 0
-        cur_mask = (mask[bi]).byte()
+        cur_mask = (mask[bi]).bool()
         foreground_num = torch.sum(cur_mask)
 
         # if too few points, just skip it

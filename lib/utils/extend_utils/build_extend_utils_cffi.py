@@ -1,17 +1,20 @@
 import os
 
-ceres_include='./include'          # contains Ceres/ceres.h
-ceres_library='./lib/libceres.so'
-eigen_include='./include/eigen3'                     # contains Eigen/Core
-glog_library='./lib/libglog.so'
-cuda_include='/usr/local/cuda-8.0/include'
-cudart = '/usr/local/cuda-8.0/lib64/libcudart.so'
+# Use conda-installed ceres, eigen, glog
+conda_prefix = os.environ.get('CONDA_PREFIX', '/home/cetc2028/miniconda3/envs/pvnet')
+ceres_include = os.path.join(conda_prefix, 'include')
+ceres_library = os.path.join(conda_prefix, 'lib', 'libceres.so')
+eigen_include = os.path.join(conda_prefix, 'include', 'eigen3')
+glog_library = os.path.join(conda_prefix, 'lib', 'libglog.so')
+glog_include = os.path.join(conda_prefix, 'include')
+cuda_include='/usr/local/cuda-13.0/include'
+cudart = '/usr/local/cuda-13.0/lib64/libcudart.so'
 
-os.system('gcc -shared src/mesh_rasterization.cpp -c -o src/mesh_rasterization.cpp.o -fopenmp -fPIC -O2 -std=c++11')
-os.system('gcc -shared src/farthest_point_sampling.cpp -c -o src/farthest_point_sampling.cpp.o -fopenmp -fPIC -O2 -std=c++11')
-os.system('gcc -shared src/uncertainty_pnp.cpp -c -o src/uncertainty_pnp.cpp.o -fopenmp -fPIC -O2 -std=c++11 -I {} -I {}'.
-          format(ceres_include,eigen_include))
-os.system('nvcc src/nearest_neighborhood.cu -c -o src/nearest_neighborhood.cu.o -x cu -Xcompiler -fPIC -O2 -arch=sm_52 -I {} -D_FORCE_INLINES'.
+os.system('gcc -shared src/mesh_rasterization.cpp -c -o src/mesh_rasterization.cpp.o -fopenmp -fPIC -O2 -std=c++17')
+os.system('gcc -shared src/farthest_point_sampling.cpp -c -o src/farthest_point_sampling.cpp.o -fopenmp -fPIC -O2 -std=c++17')
+os.system('gcc -shared src/uncertainty_pnp.cpp -c -o src/uncertainty_pnp.cpp.o -fopenmp -fPIC -O2 -std=c++17 -I {} -I {} -I {} -DGLOG_USE_GLOG_EXPORT'.
+          format(ceres_include, eigen_include, glog_include))
+os.system('nvcc src/nearest_neighborhood.cu -c -o src/nearest_neighborhood.cu.o -x cu -Xcompiler -fPIC -O2 -arch=sm_121 -I {} -D_FORCE_INLINES'.
           format(cuda_include))
 
 from cffi import FFI
