@@ -1,0 +1,9 @@
+# keep checkpoints / logs / raw arrays out of git
+model/
+record/
+results/figures/
+*.pth
+*.log
+*.npy
+*.npz
+*.tfevents.*
