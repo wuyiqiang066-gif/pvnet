@@ -1,0 +1,45 @@
+parameter | baseline (linemod_train.json) | Exp001-S (exp001_reliability_voting_scratch.json) | note
+--- | --- | --- | ---
+aug_cfg | {"blur": true, "brightness": 0.1, "contrast": 0.1, "crop": true, "flip": false, "hmax": 480, "hmin": 256, "hue": 0.05, "ignore_fuse_ms_vertex": false, "jitter": true, "mask": false, "max_mask": 0.4, "min_mask": 0.1, "overlap_ratio": 0.8, "resize_hmax": 130, "resize_hmin": 20, "resize_ratio_max": 1.2, "resize_ratio_min": 0.8, "resize_wmax": 130, "resize_wmin": 20, "rot_ang_max": 30, "rot_ang_min": -30, "rotation": true, "saturation": 0.05, "size_int": 8, "use_mask_out": false, "use_old": true, "wmax": 640, "wmin": 256} | {"blur": true, "brightness": 0.1, "contrast": 0.1, "crop": true, "flip": false, "hmax": 480, "hmin": 256, "hue": 0.05, "ignore_fuse_ms_vertex": false, "jitter": true, "mask": false, "max_mask": 0.4, "min_mask": 0.1, "overlap_ratio": 0.8, "resize_hmax": 130, "resize_hmin": 20, "resize_ratio_max": 1.2, "resize_ratio_min": 0.8, "resize_wmax": 130, "resize_wmin": 20, "rot_ang_max": 30, "rot_ang_min": -30, "rotation": true, "saturation": 0.05, "size_int": 8, "use_mask_out": false, "use_old": true, "wmax": 640, "wmin": 256} | identical
+epoch_num | 200 | 200 | identical
+eval_epoch | false | false | identical
+eval_epoch_begin | 80 | 80 | identical
+eval_inter | 5 | 5 | identical
+experiment_dir | "<ABSENT>" | "experiments/exp001_reliability_voting_scratch" | expected: reliability-specific / experiment-isolation addition
+finetune | false | false | identical
+img_rec_step | 160 | 160 | identical
+init_seed | "<ABSENT>" | 0 | expected: reliability-specific / experiment-isolation addition
+loss_rec_step | 80 | 80 | identical
+lr | 0.001 | 0.001 | identical
+lr_decay_epoch | 20 | 20 | identical
+lr_decay_rate | 0.5 | 0.5 | identical
+model_name | "linemod_train" | "exp001s_scratch" | expected: experiment name
+motion_model | false | false | identical
+network | "resnet18_8s" | "resnet18_8s" | identical
+reliability_loss_ratio | "<ABSENT>" | 1.0 | expected: reliability-specific / experiment-isolation addition
+reliability_min_weight | "<ABSENT>" | 0.001 | expected: reliability-specific / experiment-isolation addition
+reliability_sigma_px | "<ABSENT>" | 3.0 | expected: reliability-specific / experiment-isolation addition
+reliability_tau1_px | "<ABSENT>" | 0.5 | expected: reliability-specific / experiment-isolation addition
+reliability_tau2_px | "<ABSENT>" | 30.0 | expected: reliability-specific / experiment-isolation addition
+resume | true | true | identical
+save_init_snapshot | "<ABSENT>" | true | expected: reliability-specific / experiment-isolation addition
+test_batch_size | 1 | 1 | identical
+train_batch_size | 32 | 32 | identical
+use_fuse | true | true | identical
+use_multi_syn | false | false | identical
+use_plane | false | false | identical
+use_printer_set | false | false | identical
+use_real_train | true | true | identical
+use_reliability_vote | "<ABSENT>" | true | expected: reliability-specific / experiment-isolation addition
+use_render_all | true | true | identical
+use_render_new | false | false | identical
+use_render_occ | false | false | identical
+use_render_orig | false | false | identical
+use_weighted_voting | "<ABSENT>" | true | expected: reliability-specific / experiment-isolation addition
+vertex_loss_ratio | 1.0 | 1.0 | identical
+vote_max_num | "<ABSENT>" | 100 | expected: reliability-specific / experiment-isolation addition
+vote_round_hyp_num | "<ABSENT>" | 128 | expected: reliability-specific / experiment-isolation addition
+vote_type | "Farthest" | "Farthest" | identical
+
+Eval-time RANSAC parameters: baseline hardcodes (128, inlier_thresh=0.99, max_num=100) in tools/train_linemod.py::EvalWrapper; Exp001-S uses vote_round_hyp_num=128, vote_max_num=100 and the same inlier_thresh=0.99 -> identical.
+eval_epoch=false kept identical to baseline; trajectory metrics are evaluated post-hoc from per-epoch checkpoints with the same protocol.

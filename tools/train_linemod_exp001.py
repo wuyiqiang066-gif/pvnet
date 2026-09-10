@@ -96,18 +96,27 @@ def pseudo_reliability(vertex_pred, gt_kps, fg_mask, sigma_px, tau1_px=0.0, tau2
     return r_star, e_all
 
 
+RELIABILITY_STAT_FIELDS = ['mean', 'std', 'min', 'max', 'p01', 'p10', 'p50', 'p90', 'p99']
+
+
 def reliability_label_stats(r_star, fg_mask, bins=32):
     """per-batch statistics of the pseudo labels over foreground pixels."""
     m = fg_mask.bool().expand_as(r_star)
     v = r_star[m].float()
     if v.numel() == 0:
-        return {'mean': 0.0, 'std': 0.0, 'min': 0.0, 'max': 0.0, 'num': 0,
-                'hist': [0] * bins, 'bin_edges': [i / bins for i in range(bins + 1)]}
+        out = {k: 0.0 for k in RELIABILITY_STAT_FIELDS}
+        out.update({'num': 0, 'hist': [0] * bins,
+                    'bin_edges': [i / bins for i in range(bins + 1)]})
+        return out
     hist = torch.histc(v, bins=bins, min=0.0, max=1.0)
-    return {'mean': v.mean().item(), 'std': v.std().item(),
-            'min': v.min().item(), 'max': v.max().item(), 'num': int(v.numel()),
-            'hist': [int(x) for x in hist.tolist()],
-            'bin_edges': [i / bins for i in range(bins + 1)]}
+    qs = torch.quantile(v, torch.tensor([0.01, 0.1, 0.5, 0.9, 0.99], device=v.device))
+    out = {'mean': v.mean().item(), 'std': v.std().item(),
+           'min': v.min().item(), 'max': v.max().item(),
+           'p01': qs[0].item(), 'p10': qs[1].item(), 'p50': qs[2].item(),
+           'p90': qs[3].item(), 'p99': qs[4].item(), 'num': int(v.numel()),
+           'hist': [int(x) for x in hist.tolist()],
+           'bin_edges': [i / bins for i in range(bins + 1)]}
+    return out
 
 
 # ---------------- train wrapper ----------------
@@ -207,22 +216,31 @@ def save_label_stats(epoch, stage, stats_list, train_cfg):
         return
     bins = len(stats_list[0]['hist'])
     hist = np.mean([s['hist'] for s in stats_list], axis=0).astype(np.int64)
-    out = {'epoch': epoch, 'stage': stage,
-           'mean': float(np.mean([s['mean'] for s in stats_list])),
-           'std': float(np.mean([s['std'] for s in stats_list])),
-           'min': float(np.min([s['min'] for s in stats_list])),
-           'max': float(np.max([s['max'] for s in stats_list])),
-           'num_pixels': int(np.mean([s['num'] for s in stats_list])),
-           'hist': hist.tolist(),
-           'bin_edges': stats_list[0]['bin_edges']}
+    out = {'epoch': epoch, 'stage': stage}
+    for k in RELIABILITY_STAT_FIELDS:
+        agg = np.min if k in ('min',) else np.max if k in ('max',) else np.mean
+        out[k] = float(agg([s[k] for s in stats_list]))
+    out['num_pixels'] = int(np.mean([s['num'] for s in stats_list]))
+    out['hist'] = hist.tolist()
+    out['bin_edges'] = stats_list[0]['bin_edges']
     results_dir = os.path.join(EXP_DIR, 'results')
     os.makedirs(os.path.join(results_dir, 'label_hist'), exist_ok=True)
     with open(os.path.join(results_dir, 'reliability_label_stats.jsonl'), 'a') as f:
         f.write(json.dumps(out) + '\n')
+    csv_path = os.path.join(results_dir, 'reliability_statistics.csv')
+    if not os.path.exists(csv_path):
+        with open(csv_path, 'w') as f:
+            f.write('epoch,stage,' + ','.join(RELIABILITY_STAT_FIELDS) + ',num_pixels\n')
+    with open(csv_path, 'a') as f:
+        f.write('{},{},'.format(epoch, stage)
+                + ','.join('{:.6f}'.format(out[k]) for k in RELIABILITY_STAT_FIELDS)
+                + ',{}\n'.format(out['num_pixels']))
     np.savez(os.path.join(results_dir, 'label_hist', 'epoch_{:03d}.npz'.format(epoch)),
              hist=hist, bin_edges=np.array(out['bin_edges']))
-    print('label stats: epoch {} stage {} mean {:.4f} std {:.4f} min {:.4f} max {:.4f}'.format(
-        epoch, stage, out['mean'], out['std'], out['min'], out['max']), flush=True)
+    print('label stats: epoch {} stage {} mean {:.4f} std {:.4f} min {:.4f} max {:.4f} '
+          'p01 {:.3f} p10 {:.3f} p50 {:.3f} p90 {:.3f} p99 {:.3f}'.format(
+              epoch, stage, out['mean'], out['std'], out['min'], out['max'],
+              out['p01'], out['p10'], out['p50'], out['p90'], out['p99']), flush=True)
 
 
 def train(net, optimizer, dataloader, epoch, train_cfg, recorder, stage=2):
@@ -300,11 +318,13 @@ def val(net, dataloader, epoch, train_cfg, recorder, val_prefix='val', force_eva
     test_begin = time.time()
     evaluator = Evaluator()
     use_rel = train_cfg['use_reliability_vote']
+    # Ablation A switch: train reliability head but vote with uniform weights.
+    use_wv = train_cfg.get('use_weighted_voting', use_rel)
     if recorder is None:
         recorder = Recorder(False, os.path.join(EXP_DIR, 'record'),
                             os.path.join(EXP_DIR, 'record', 'test_{}.log'.format(val_prefix)))
 
-    if use_rel:
+    if use_wv:
         eval_net = DataParallel(EvalWrapperRel(train_cfg).cuda())
     else:
         eval_net = DataParallel(EvalWrapperBaseline(train_cfg).cuda())
@@ -320,7 +340,7 @@ def val(net, dataloader, epoch, train_cfg, recorder, val_prefix='val', force_eva
                 [torch.mean(v) for v in (loss_seg, loss_vertex, loss_rel, precision, recall)]
 
             if do_eval:
-                if use_rel:
+                if use_wv:
                     corner_pred = eval_net(seg_pred, vertex_pred, rel_logits).cpu().detach().numpy()
                 else:
                     corner_pred = eval_net(seg_pred, vertex_pred).cpu().detach().numpy()
@@ -375,10 +395,10 @@ def load_net_weights(net, model_dir, epoch=-1):
 
 
 def resolve_test_model_dir(train_cfg):
-    """test_model: prefer stage2_joint, then stage1_rel_warmup, then the single-stage dir."""
-    candidates = [os.path.join(EXP_DIR, 'model', 'stage2_joint'),
-                  os.path.join(EXP_DIR, 'model', 'stage1_rel_warmup'),
-                  os.path.join(EXP_DIR, 'model', train_cfg['model_name'])]
+    """test_model: prefer the single-stage dir, then stage2_joint, then stage1_rel_warmup."""
+    candidates = [os.path.join(EXP_DIR, 'model', train_cfg['model_name']),
+                  os.path.join(EXP_DIR, 'model', 'stage2_joint'),
+                  os.path.join(EXP_DIR, 'model', 'stage1_rel_warmup')]
     for d in candidates:
         if os.path.isdir(d) and any(f.endswith('.pth') for f in os.listdir(d)):
             return d
@@ -387,6 +407,12 @@ def resolve_test_model_dir(train_cfg):
 
 def train_net(args, train_cfg):
     use_rel = train_cfg['use_reliability_vote']
+    # fixed init seed BEFORE any network construction (baseline entry itself is
+    # unseeded in its training path; see experiment README, Initialization).
+    seed = int(train_cfg.get('init_seed', 0))
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    print('initialization: from scratch, torch.manual_seed({})'.format(seed), flush=True)
     if use_rel:
         net = Resnet18_8sReliability(ver_dim=VOTE_NUM * 2, seg_dim=2)
     else:
@@ -397,6 +423,22 @@ def train_net(args, train_cfg):
     net = DataParallel(net).cuda()
 
     optimizer = optim.Adam(net.parameters(), lr=train_cfg['lr'])
+
+    # shared deterministic initialization snapshot: Exp001-S and Ablation A load
+    # the SAME file so that paired experiments are bit-identical at epoch 0.
+    if use_rel and train_cfg.get('save_init_snapshot') and not args.test_model:
+        init_path = os.path.join(EXP_DIR, 'initialization', 'shared_initialization.pth')
+        if os.path.exists(init_path):
+            net.module.net.load_state_dict(
+                torch.load(init_path, map_location='cpu')['net'])
+            print('loaded shared initialization {}'.format(init_path), flush=True)
+        else:
+            os.makedirs(os.path.dirname(init_path), exist_ok=True)
+            torch.save({'net': net.module.net.state_dict(), 'seed': seed,
+                        'rel_head_init': 'pytorch default under manual_seed({})'.format(seed),
+                        'note': 'regenerate deterministically; do not commit (gitignored pth)'},
+                       init_path)
+            print('saved shared initialization {}'.format(init_path), flush=True)
 
     if args.test_model:
         model_dir = resolve_test_model_dir(train_cfg)
@@ -499,7 +541,9 @@ def train_net(args, train_cfg):
                 val(net, occ_val_loader, epoch, train_cfg, recorder, 'occ_val')
             save_model(net.module.net, optimizer, epoch, stage2_dir)
     else:
-        # single-stage path (also the exact-baseline switch when use_reliability_vote=false)
+        # single-stage path (also the exact-baseline switch when use_reliability_vote=false).
+        # NOTE stage must stay >=2: set_stage1_mode(freeze) would wrongly freeze the
+        # backbone in a from-scratch joint run.
         begin_epoch = 0
         if train_cfg['resume']:
             begin_epoch = load_model(net.module.net, optimizer, single_dir)
@@ -507,8 +551,7 @@ def train_net(args, train_cfg):
         for epoch in range(begin_epoch, train_cfg['epoch_num']):
             adjust_learning_rate(optimizer, epoch, train_cfg['lr_decay_rate'],
                                  train_cfg['lr_decay_epoch'])
-            train(net, optimizer, train_loader, epoch, train_cfg, recorder,
-                  stage=1 if use_rel else 2)
+            train(net, optimizer, train_loader, epoch, train_cfg, recorder, stage=2)
             val(net, val_loader, epoch, train_cfg, recorder)
             if occ_val_loader is not None:
                 val(net, occ_val_loader, epoch, train_cfg, recorder, 'occ_val')
@@ -544,5 +587,7 @@ def prepare_exp_dir(args, train_cfg):
 
 if __name__ == '__main__':
     args, train_cfg = parse_args_and_config()
+    if train_cfg.get('experiment_dir'):     # scratch / ablation experiments use their own dir
+        EXP_DIR = train_cfg['experiment_dir']
     prepare_exp_dir(args, train_cfg)
     train_net(args, train_cfg)
