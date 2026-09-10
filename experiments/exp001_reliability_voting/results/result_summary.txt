@@ -1,0 +1,8 @@
+val	epoch 80	proj_err 0.9960	add 0.5170	5cm5deg 0.9062
+occ_val	epoch 80	proj_err 0.6088	add 0.1096	5cm5deg 0.0809
+val	epoch 85	proj_err 0.9980	add 0.5768	5cm5deg 0.9361
+occ_val	epoch 85	proj_err 0.6121	add 0.1366	5cm5deg 0.0759
+val	epoch 90	proj_err 0.9980	add 0.5070	5cm5deg 0.9222
+occ_val	epoch 90	proj_err 0.5919	add 0.1315	5cm5deg 0.0658
+val	epoch 95	proj_err 0.9960	add 0.5848	5cm5deg 0.8862
+occ_val	epoch 95	proj_err 0.6105	add 0.1366	5cm5deg 0.0691
