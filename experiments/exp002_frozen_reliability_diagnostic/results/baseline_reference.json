@@ -1,0 +1,17 @@
+{
+  "source": "corrected protocol, see exp001 DATA_INTEGRITY_NOTE.md",
+  "199.pth": {
+    "linemod_val_501": {
+      "projection_error": 0.998003992015968,
+      "add": 0.8023952095808383,
+      "cm_degree_5": 0.9860279441117764,
+      "num": 501
+    },
+    "occ_val_firsthalf": {
+      "projection_error": 0.6205733558178752,
+      "add": 0.17537942664418213,
+      "cm_degree_5": 0.1163575042158516,
+      "num": 593
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "199.pth keys": 152,
+  "stage1e7 keys": 160,
+  "num differing keys (nonzero diff)": 8,
+  "differing rel_head keys": 0,
+  "differing NON-rel_head keys": 0,
+  "max abs diff over NON-rel_head params": 0.0,
+  "all diffs confined to rel_head": true,
+  "differing keys detail": {
+    "rel_head.0.weight": "NEW_IN_STAGE1",
+    "rel_head.1.bias": "NEW_IN_STAGE1",
+    "rel_head.1.num_batches_tracked": "NEW_IN_STAGE1",
+    "rel_head.1.running_mean": "NEW_IN_STAGE1",
+    "rel_head.1.running_var": "NEW_IN_STAGE1",
+    "rel_head.1.weight": "NEW_IN_STAGE1",
+    "rel_head.3.bias": "NEW_IN_STAGE1",
+    "rel_head.3.weight": "NEW_IN_STAGE1"
+  }
+}

@@ -123,14 +123,26 @@ def reliability_label_stats(r_star, fg_mask, bins=32):
 class NetWrapperRel(nn.Module):
     """Train/test wrapper. use_rel=False reproduces the baseline exactly."""
 
-    def __init__(self, net, use_rel, sigma_px, tau1_px=0.0, tau2_px=0.0):
+    def __init__(self, net, use_rel, sigma_px, tau1_px=0.0, tau2_px=0.0,
+                 freeze_trunk=False):
         super(NetWrapperRel, self).__init__()
         self.net = net
         self.use_rel = use_rel
         self.sigma_px = sigma_px
         self.tau1_px = tau1_px
         self.tau2_px = tau2_px
+        self.freeze_trunk = freeze_trunk
         self.criterion = nn.CrossEntropyLoss(reduction='none')
+
+    def train(self, mode=True):
+        """With freeze_trunk, trunk BN layers stay in eval mode even during
+        training so running stats never drift from the frozen checkpoint."""
+        super(NetWrapperRel, self).train(mode)
+        if mode and self.freeze_trunk:
+            for name, mod in self.net.named_modules():
+                if not name.startswith('rel_head') and isinstance(mod, nn.BatchNorm2d):
+                    mod.eval()
+        return self
 
     def forward(self, image, mask, vertex, vertex_weights, gt_kps):
         gt_kps = to_kp_px(gt_kps)
@@ -419,10 +431,30 @@ def train_net(args, train_cfg):
         net = Resnet18_8s(ver_dim=VOTE_NUM * 2, seg_dim=2)
     net = NetWrapperRel(net, use_rel, train_cfg['reliability_sigma_px'],
                         train_cfg.get('reliability_tau1_px', 0.0),
-                        train_cfg.get('reliability_tau2_px', 0.0))
+                        train_cfg.get('reliability_tau2_px', 0.0),
+                        freeze_trunk=train_cfg.get('freeze_trunk', False))
     net = DataParallel(net).cuda()
 
-    optimizer = optim.Adam(net.parameters(), lr=train_cfg['lr'])
+    # frozen-trunk diagnostic: load a FIXED trunk checkpoint (e.g. 199.pth);
+    # only rel_head is trainable, BN running stats stay at checkpoint values.
+    if train_cfg.get('init_checkpoint'):
+        sd = torch.load(train_cfg['init_checkpoint'], map_location='cpu')['net']
+        missing, unexpected = net.module.net.load_state_dict(sd, strict=False)
+        assert not unexpected, 'unexpected keys: {}'.format(unexpected)
+        assert all(k.startswith('rel_head') for k in missing), missing
+        print('loaded frozen trunk from {} ({} trunk tensors, rel_head random)'.format(
+            train_cfg['init_checkpoint'], len(sd)), flush=True)
+
+    if train_cfg.get('freeze_trunk'):
+        for n, p in net.module.net.named_parameters():
+            if not n.startswith('rel_head'):
+                p.requires_grad_(False)
+        n_frozen = sum(1 for p in net.module.net.parameters() if not p.requires_grad)
+        print('freeze_trunk: {} tensors frozen, only rel_head trains'.format(n_frozen),
+              flush=True)
+
+    optimizer = optim.Adam([p for p in net.parameters() if p.requires_grad],
+                           lr=train_cfg['lr'])
 
     # shared deterministic initialization snapshot: Exp001-S and Ablation A load
     # the SAME file so that paired experiments are bit-identical at epoch 0.
