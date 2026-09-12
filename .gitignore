@@ -63,3 +63,4 @@ __pycache__/
 # compiled cuda
 *.so
 build/
+record/
