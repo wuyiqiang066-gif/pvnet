@@ -1,0 +1,33 @@
+{
+  "checkpoint": "data/model/cat_linemod_train/199.pth",
+  "linemod_cls": "cat",
+  "splits": {
+    "linemod_val": {"n_images": 501, "source": "LineModImageDB('cat').val_real_set"},
+    "occ_val": {"n_images": 593, "source": "OcclusionLineModImageDB('cat').test_real_set[:len//2]"}
+  },
+  "ransac": {
+    "class_num": 2,
+    "round_hyp_num": 128,
+    "inlier_thresh": 0.99,
+    "confidence": 0.99,
+    "max_iter": 20,
+    "max_num": 100,
+    "min_num": 5,
+    "refine_iter_num": 1
+  },
+  "exp003": {
+    "tau_hard": [4, 6],
+    "sigma_soft": 4,
+    "weight_clip": 0.001,
+    "min_votes": 32,
+    "pass1_tol": 1e-05,
+    "methods": ["A4", "A6", "B4"]
+  },
+  "seeds": [0, 1, 2],
+  "eval": {
+    "linemod_cls": "cat",
+    "dataset_type": "linemod",
+    "voting_type": "Farthest"
+  },
+  "notes": "Baseline protocol reference (same ckpt/split/evaluator): LINEMOD val 501 ADD(-S) ~80.24, OCC val 593 ADD(-S) ~17.54. Never use the invalid 46.25 / 1219-image protocol."
+}

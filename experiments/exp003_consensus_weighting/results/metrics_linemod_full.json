@@ -1,0 +1,70 @@
+{
+  "1": {
+    "baseline": {
+      "add": 0.8023952095808383,
+      "projection_error": 0.998003992015968,
+      "cm_degree_5": 0.9800399201596807,
+      "n_images": 501,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "A4": {
+      "add": 0.8023952095808383,
+      "projection_error": 0.998003992015968,
+      "cm_degree_5": 0.9800399201596807,
+      "n_images": 501,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "A6": {
+      "add": 0.8023952095808383,
+      "projection_error": 0.998003992015968,
+      "cm_degree_5": 0.9800399201596807,
+      "n_images": 501,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "B4": {
+      "add": 0.8063872255489022,
+      "projection_error": 0.998003992015968,
+      "cm_degree_5": 0.9800399201596807,
+      "n_images": 501,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    }
+  },
+  "2": {
+    "baseline": {
+      "add": 0.8023952095808383,
+      "projection_error": 0.998003992015968,
+      "cm_degree_5": 0.9820359281437125,
+      "n_images": 501,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "A4": {
+      "add": 0.8043912175648703,
+      "projection_error": 0.998003992015968,
+      "cm_degree_5": 0.9840319361277445,
+      "n_images": 501,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "A6": {
+      "add": 0.8023952095808383,
+      "projection_error": 0.998003992015968,
+      "cm_degree_5": 0.9820359281437125,
+      "n_images": 501,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "B4": {
+      "add": 0.8003992015968064,
+      "projection_error": 0.998003992015968,
+      "cm_degree_5": 0.9820359281437125,
+      "n_images": 501,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    }
+  }
+}

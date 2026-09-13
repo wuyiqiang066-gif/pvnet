@@ -1,0 +1,44 @@
+{
+  "0": {
+    "U1": {
+      "add": 0.6,
+      "projection_error": 1.0,
+      "cm_degree_5": 1.0,
+      "n_images": 10,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "baseline": {
+      "add": 0.6,
+      "projection_error": 1.0,
+      "cm_degree_5": 1.0,
+      "n_images": 10,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "A4": {
+      "add": 0.6,
+      "projection_error": 1.0,
+      "cm_degree_5": 1.0,
+      "n_images": 10,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "A6": {
+      "add": 0.6,
+      "projection_error": 1.0,
+      "cm_degree_5": 1.0,
+      "n_images": 10,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    },
+    "B4": {
+      "add": 0.6,
+      "projection_error": 1.0,
+      "cm_degree_5": 1.0,
+      "n_images": 10,
+      "fallback_counts": {},
+      "fallback_rate": 0.0
+    }
+  }
+}
