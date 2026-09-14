@@ -1,0 +1,11 @@
+{
+  "cls": "cat",
+  "n_img": 20,
+  "ckpt": "data/model/cat_linemod_train/199.pth",
+  "ray_set": "visible fg pixels (GT mask) with |K_k - q| >= 1px, identical to EXP008 global-oracle ray set; ray content = PREDICTED unit directions",
+  "estimator_A": "Global-LS: LS intersection of predicted rays (ridge 1e-9)",
+  "estimator_B": "Global-Robust: existing PVNet ransac_voting_layer_v3 called verbatim (round_hyp_num=128, inlier_thresh=0.99, max_num=100), GT visible mask, torch.manual_seed(0) per call, mechanism unchanged",
+  "target": "d_hat = normalize(K_hat - p); angle vs GT direction; EXP006/008 pool",
+  "control": "same LS estimator on GT rays must reproduce EXP008 global oracle",
+  "go_stop": "GO-object-level iff min(OCC LS, OCC Robust) <= 4.097 (>=20% vs baseline 5.121); else STOP-object-level"
+}

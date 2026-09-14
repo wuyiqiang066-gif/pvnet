@@ -1,0 +1,7 @@
+split,estimator,count,mean_px_err,median_px_err
+linemod,ls_pred,180,1.610,1.240
+linemod,robust_pred,180,1.625,1.270
+linemod,ls_gt,180,0.000,0.000
+occ,ls_pred,180,2.905,2.291
+occ,robust_pred,180,2.906,2.337
+occ,ls_gt,180,0.000,0.000

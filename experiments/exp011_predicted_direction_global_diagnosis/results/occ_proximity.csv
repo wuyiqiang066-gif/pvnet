@@ -1,0 +1,4 @@
+dist_to_occluded_region_px,n_images,n_entries,baseline_mean_deg,global_ls_mean_deg,global_robust_mean_deg
+0-5,9,12429,7.653,7.507,7.573
+5-20,9,40324,4.921,4.762,4.709
+20-inf,7,30306,3.522,3.134,3.045

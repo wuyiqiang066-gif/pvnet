@@ -1,0 +1,7 @@
+split,method,count,mean_deg,median_deg,p90_deg
+linemod,baseline,440940,2.969,1.699,6.046
+linemod,ls_pred,440940,2.729,1.377,5.770
+linemod,robust_pred,440940,2.743,1.381,5.800
+occ,baseline,250033,5.121,2.822,10.901
+occ,ls_pred,250033,4.960,2.550,10.791
+occ,robust_pred,250033,4.944,2.536,10.760
