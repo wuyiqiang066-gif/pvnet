@@ -1,0 +1,5 @@
+region,control_mean_deg,exp009_mean_deg,rel_change
+all,5.121,6.437,+0.2570
+interior,5.330,6.540,+0.2271
+normal_boundary,4.848,6.187,+0.2762
+occlusion_boundary,7.653,9.248,+0.2084

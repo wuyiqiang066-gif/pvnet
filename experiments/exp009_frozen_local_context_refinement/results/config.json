@@ -1,0 +1,12 @@
+{
+  "cls": "cat",
+  "n_img": 20,
+  "ckpt": "data/model/cat_linemod_train/199.pth",
+  "frozen": "entire PVNet (backbone, conv8s/4s/2s, convraw incl. vertex head, BN running stats); no_grad trunk forward; requires_grad=False",
+  "module": "DW3x3(32,g=32) -> PW1x1(32->18); PW zero-init; v_refined = normalize(v_base + dv)",
+  "n_params": 914,
+  "loss": "lib.utils.net_utils.smooth_l1_loss(sigma=1, vertex_weights=fg mask), applied to v_refined vs dataset GT vertex targets",
+  "train": "20 LIN images (EXP005 IDs), augment=False, 20 epochs, Adam lr=1e-3, seed=0",
+  "eval": "direction error (deg), EXP006/008 pool (visible fg, |K-p|>=1px, 9 kps pooled); OCC regions via amodal mask (EXP005/006 definitions); Control evaluated in-run",
+  "go_stop": "GO iff OCC <= 4.609 AND LIN <= 3.118"
+}

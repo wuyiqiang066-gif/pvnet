@@ -1,0 +1,11 @@
+split,method,count,mean_deg,median_deg,p90_deg
+linemod,199.pth_baseline,440940,2.969,1.699,6.046
+linemod,exp009,440940,2.807,1.623,5.668
+occ,199.pth_baseline,250033,5.121,2.822,10.901
+occ,199.pth_baseline_interior,69280,5.330,3.004,11.292
+occ,199.pth_baseline_normal_boundary,168324,4.848,2.714,10.267
+occ,199.pth_baseline_occlusion_boundary,12429,7.653,3.368,19.260
+occ,exp009,250033,6.437,4.373,13.226
+occ,exp009_interior,69280,6.540,4.433,13.103
+occ,exp009_normal_boundary,168324,6.187,4.240,12.854
+occ,exp009_occlusion_boundary,12429,9.248,5.806,20.532
