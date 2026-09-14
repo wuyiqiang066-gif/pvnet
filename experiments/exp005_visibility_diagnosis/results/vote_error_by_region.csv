@@ -1,0 +1,9 @@
+split,region,votes,mean_e_px,median_e_px,p90_e_px,bad_vote_rate_e_gt_10px
+linemod,all,441387,1.214,0.911,2.599,0.0003
+linemod,interior,167283,1.140,0.853,2.433,0.0000
+linemod,normal_boundary,272988,1.259,0.947,2.710,0.0005
+linemod,occlusion_boundary,1116,1.258,1.083,2.381,0.0000
+occ,all,250389,1.711,1.278,3.742,0.0029
+occ,interior,69345,1.630,1.255,3.661,0.0000
+occ,normal_boundary,168597,1.684,1.275,3.693,0.0018
+occ,occlusion_boundary,12447,2.520,1.485,6.209,0.0326

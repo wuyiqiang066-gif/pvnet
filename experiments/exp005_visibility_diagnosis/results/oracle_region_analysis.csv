@@ -1,0 +1,7 @@
+split,region,vote_fraction_all,vote_fraction_top50,vote_fraction_bottom50
+linemod,interior,0.3790,0.1970,0.1820
+linemod,normal_boundary,0.6185,0.3022,0.3163
+linemod,occlusion_boundary,0.0025,0.0008,0.0017
+occ,interior,0.2769,0.1427,0.1343
+occ,normal_boundary,0.6733,0.3323,0.3411
+occ,occlusion_boundary,0.0497,0.0251,0.0246
