@@ -1,0 +1,11 @@
+signal,split,pearson,spearman
+seg_conf,linemod,-0.0526,-0.0858
+boundary,linemod,-0.0661,-0.0650
+localcons,linemod,-0.0907,-0.0840
+mag,linemod,-0.0039,-0.0295
+segbnd,linemod,-0.0437,-0.0477
+seg_conf,occ,-0.0998,-0.0757
+boundary,occ,-0.0483,-0.0324
+localcons,occ,0.0588,-0.0044
+mag,occ,-0.0622,-0.0232
+segbnd,occ,-0.0395,-0.0383

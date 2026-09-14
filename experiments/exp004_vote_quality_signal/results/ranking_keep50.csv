@@ -1,0 +1,11 @@
+signal,split,e_selected,e_random,e_oracle
+seg_conf,linemod,1.1418,1.2242,0.4380
+boundary,linemod,1.1659,1.2242,0.4380
+localcons,linemod,1.1173,1.2242,0.4380
+mag,linemod,1.2477,1.2242,0.4380
+segbnd,linemod,1.1808,1.2242,0.4380
+seg_conf,occ,1.6015,2.2091,0.6113
+boundary,occ,1.6508,2.2091,0.6113
+localcons,occ,2.4439,2.2091,0.6113
+mag,occ,2.4707,2.2091,0.6113
+segbnd,occ,1.7264,2.2091,0.6113
