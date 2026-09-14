@@ -1,0 +1,4 @@
+dist_to_occluded_region_px,n_images,n_entries,blind_mean_deg,oracle_valid_mean_deg,oracle_valid_n_available,oracle_valid_unavailable_pct
+0-5,9,12429,1.211,2.306,9131,26.53
+5-20,9,40324,0.477,1.576,33680,16.48
+20-inf,7,30306,0.755,1.639,26820,11.50

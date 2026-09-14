@@ -1,0 +1,36 @@
+{
+  "baseline": {
+    "lin": 2.969,
+    "occ": 5.121
+  },
+  "blind_r3": {
+    "lin": 0.36182850277550627,
+    "occ": 0.5692976918159285
+  },
+  "oracle_valid_r3": {
+    "lin": 1.0992012946069436,
+    "occ": 1.7980302649952513
+  },
+  "validity_stats": {
+    "linemod": {
+      "mean_valid_ratio": 0.8623047589241177,
+      "median_valid_ratio": 1.0,
+      "unavailable_pct": 6.923844513992833
+    },
+    "occ": {
+      "mean_valid_ratio": 0.6892715569886905,
+      "median_valid_ratio": 1.0,
+      "unavailable_pct": 20.091747889278615
+    }
+  },
+  "spearman_occ": {
+    "rho": -0.8535188229665783,
+    "p": 0.0,
+    "n": 250033
+  },
+  "n_occ_images_with_occl": 9,
+  "decision": "STOP",
+  "cond1_clear_improvement": false,
+  "cond2_near_oracle": false,
+  "runtime_s": 2.8056461811065674
+}
