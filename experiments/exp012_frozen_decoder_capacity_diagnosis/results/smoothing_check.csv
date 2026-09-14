@@ -1,0 +1,7 @@
+split,decoder,field_roughness_mean
+linemod,D0,0.03006
+linemod,D1,0.02997
+linemod,D2,0.02998
+occ,D0,0.03427
+occ,D1,0.03465
+occ,D2,0.03433

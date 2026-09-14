@@ -1,0 +1,7 @@
+split,decoder,in_sample_loss_full_image
+linemod,D0,0.002869
+linemod,D1,0.002728
+linemod,D2,0.002739
+occ,D0,0.008945
+occ,D1,0.006191
+occ,D2,0.006800

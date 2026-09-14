@@ -1,0 +1,18 @@
+{
+  "cls": "cat",
+  "n_img": 20,
+  "ckpt": "data/model/cat_linemod_train/199.pth",
+  "frozen": "entire PVNet (backbone, conv8s/4s/2s, convraw incl. original 1x1 vertex head, BN stats); no_grad forward; requires_grad=False",
+  "shared_feature": "F = convraw[0:3](cat(fm, x)) (1,32,H,W), identical to EXP009",
+  "decoders": {
+    "D0": "original convraw[3] 1x1 head (frozen), channels [seg_dim:]",
+    "D1": "D0 + zero-init [Conv3x3(32->32) -> LeakyReLU(0.1) -> Conv1x1(32->18)]",
+    "D2": "D0 + zero-init [Conv3x3 -> LeakyReLU(0.1) -> Conv3x3 -> LeakyReLU(0.1) -> Conv1x1(32->18)]"
+  },
+  "fitting": "offline on cached frozen features; IN-SAMPLE per split (D1/D2 fitted on the fixed 20 images of the split and evaluated on the same 20 images; capacity probe, no generalization claim); EXP007-trap control: D1/D2 = D0 + zero-init 3x3(->3x3) -> 1x1 branch, init = D0 exactly (EXP009 control strategy)",
+  "loss": "lib.utils.net_utils.smooth_l1_loss(unit-normalized pred, dataset GT vertex targets, fg vertex weights, normalize=True) - per-fg-element mean (EXP009 direction-loss convention; GT supervision unchanged)",
+  "train": "5 epochs over all fg pixels (pixel minibatch 4096, Adam lr=1e-3, seed 0 re-seeded per fit, batch=1 image per step)",
+  "eval": "direction error (deg) on EXP006/008 pool (visible fg, |K-p|>=1px, 9 kps pooled): mean/median/p90, bad rate >10 deg, endpoint error (unit space); OCC proximity bands via amodal mask (EXP005/011); field roughness (smoothing check)",
+  "d0_gate": "D0 must reproduce EXP006: |LIN-2.969|<0.05 and |OCC-5.121|<0.05, else abort before fitting",
+  "go_stop": "GO-A iff min(OCC D1, OCC D2) <= 4.097 (>=20%); STOP-A if > 4.609 (<10%); else BORDERLINE"
+}
