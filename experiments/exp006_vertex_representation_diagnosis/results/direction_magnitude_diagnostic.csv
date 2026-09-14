@@ -1,0 +1,9 @@
+split,scope,endp_raw_original,endp_raw_direction_only,endp_raw_magnitude_only,endp_unit_original,endp_unit_direction_only,endp_unit_magnitude_only
+linemod,all,33.31,1.22,33.30,0.0577,0.0514,0.0188
+linemod,interior,30.37,1.14,30.36,0.0571,0.0513,0.0176
+linemod,normal_boundary,35.08,1.26,35.07,0.0582,0.0515,0.0195
+linemod,occlusion_boundary,39.58,1.26,39.58,0.0419,0.0378,0.0129
+occ,all,27.45,1.73,27.44,0.0923,0.0881,0.0203
+occ,interior,24.77,1.64,24.76,0.0956,0.0917,0.0206
+occ,normal_boundary,28.64,1.70,28.63,0.0880,0.0835,0.0197
+occ,occlusion_boundary,26.18,2.58,26.15,0.1325,0.1296,0.0273

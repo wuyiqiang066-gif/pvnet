@@ -1,0 +1,12 @@
+{
+  "cls": "cat",
+  "n_img_per_split": 20,
+  "ckpt": "data/model/cat_linemod_train/199.pth",
+  "images": "identical to EXP005 (verified against exp005 image_ids.json)",
+  "dir_bad_deg": 10.0,
+  "endp_bad_px": 10.0,
+  "prox_bins": "[(0, 2), (2, 5), (5, 10), (10, 20), (20, inf)]",
+  "supervision": "PVNet supervises UNIT direction vectors (compute_vertex_hcoords); pred_mag~=1 by construction. Metrics reported in raw space (v_gt = gt_kp - pixel, spec formula) and unit/supervision space (v_gt = unit vector); mechanism conclusions use unit space.",
+  "invalid_handling": "norms clamped at 1e-9 (no NaN); pixels with |gt_kp - pixel| < 1px excluded from all metrics (direction undefined)",
+  "diagnostics": "direction-only / magnitude-only hypothetical endpoint errors, offline only, never fed into RANSAC/PnP"
+}
