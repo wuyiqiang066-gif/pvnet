@@ -1,0 +1,4 @@
+dist_to_occluded_region_px,n_images,n_entries,baseline_mean,baseline_median,global_mean,global_median,gap_mean,gap_median
+0-5,9,12429,7.653,3.368,0.001,0.001,7.652,3.368
+5-20,9,40324,4.921,2.509,0.001,0.001,4.920,2.508
+20-inf,7,30306,3.522,1.885,0.001,0.001,3.521,1.885

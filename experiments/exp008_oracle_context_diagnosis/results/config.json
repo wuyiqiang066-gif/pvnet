@@ -1,0 +1,18 @@
+{
+  "cls": "cat",
+  "n_img_per_split": 20,
+  "ckpt": "data/model/cat_linemod_train/199.pth",
+  "images": "identical to EXP005/EXP006 (verified against exp005 image_ids.json)",
+  "radii_px": [
+    3,
+    7,
+    15,
+    30
+  ],
+  "local_estimator": "mean of neighbor GT unit directions within Euclidean radius r (p excluded); fallback = nearest eligible visible pixel GT direction",
+  "global_estimator": "least-squares ray intersection of GT direction rays of all other eligible visible pixels -> K_hat; d_hat = normalize(K_hat - p); p's own ray excluded; trivial exact-K oracle intentionally NOT used",
+  "eligibility": "visible foreground pixel (GT visible mask) with |K_k - q| >= 1px",
+  "pixel_pool": "same as EXP006 all-region pool: visible fg pixels, |K_k - p| >= 1px, all 9 keypoints pooled",
+  "proximity": "OCC only, dist_occ = distanceTransform(~(amodal & ~vis)) as EXP005/006; bands [0,5) / [5,20) / [20,inf) px; only images with non-empty occluded region",
+  "metrics": "direction error in degrees; mean/median/p90; recoverable gap = baseline - oracle"
+}
