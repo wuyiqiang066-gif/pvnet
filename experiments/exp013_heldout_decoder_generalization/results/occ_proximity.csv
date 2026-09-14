@@ -1,0 +1,4 @@
+dist_to_occluded_region_px,n_images_fit,n_entries_fit,fit_D0_mean_deg,fit_D1_mean_deg,n_images_heldout,n_entries_heldout,heldout_D0_mean_deg,heldout_D1_mean_deg
+0-5,9,12429,7.653,6.680,12,13818,11.428,11.750
+5-20,9,40324,4.921,4.657,12,34637,5.903,5.885
+20-inf,7,30306,3.522,3.667,7,48737,5.745,4.654
