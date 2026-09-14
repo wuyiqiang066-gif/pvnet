@@ -1,0 +1,6 @@
+tag,dist_bin_px,n_images,n_votes,dir_mean_deg,dir_median_deg,e_vote_mean,endp_mean_px
+controlA,0-2,9,4654,13.167,6.279,4.309,0.2269
+controlA,2-5,9,7775,11.375,6.111,3.929,0.2012
+controlA,5-10,9,14040,9.493,5.629,3.473,0.1729
+controlA,10-20,9,26284,7.767,4.851,2.823,0.1461
+controlA,20-inf,7,30306,6.714,3.775,2.430,0.1287

@@ -1,0 +1,9 @@
+branch base: pvnet_baseline_verified
+bfd3e15b7ab898ecc947dea9e8d3f5407897c9e4
+--- git status at branch creation ---
+?? experiments/diagnosis_vote_analysis/
+?? experiments/exp001_reliability_voting/
+?? experiments/exp001_reliability_voting_scratch/
+?? experiments/exp001_reliability_voting_scratch_smoke/
+?? experiments/exp002_frozen_reliability_diagnostic/
+?? experiments/exp007_context_vertex/

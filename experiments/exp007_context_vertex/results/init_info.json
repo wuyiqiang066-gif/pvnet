@@ -1,0 +1,8 @@
+{
+  "model_type": "context",
+  "total": 12969896,
+  "baseline_params": 12957748,
+  "context_module": 1344,
+  "vertex_head_copy": 10804,
+  "newly_added": 12148
+}

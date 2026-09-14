@@ -1,0 +1,9 @@
+tag,split,region,count,mean_px,median_px,p90_px
+ref199,linemod,all,440940,0.0577,0.0357,0.1110
+ref199,linemod,interior,167165,0.0571,0.0360,0.1130
+ref199,linemod,normal_boundary,272659,0.0582,0.0355,0.1097
+ref199,linemod,occlusion_boundary,1116,0.0419,0.0356,0.0794
+ref199,occ,all,250033,0.0923,0.0536,0.1949
+ref199,occ,interior,69280,0.0956,0.0565,0.2020
+ref199,occ,normal_boundary,168324,0.0880,0.0518,0.1836
+ref199,occ,occlusion_boundary,12429,0.1325,0.0633,0.3384

@@ -1,0 +1,9 @@
+tag,split,region,count,mean_deg,median_deg,p90_deg,bad_rate_gt10deg
+exp007,linemod,all,440940,3.7279,2.5037,7.2250,0.0547
+exp007,linemod,interior,167165,3.6381,2.5414,7.1409,0.0516
+exp007,linemod,normal_boundary,272659,3.7858,2.4811,7.2883,0.0567
+exp007,linemod,occlusion_boundary,1116,3.0307,2.3824,6.0986,0.0188
+exp007,occ,all,250033,7.9046,4.8261,17.4837,0.2345
+exp007,occ,interior,69280,7.8236,4.8074,17.3256,0.2339
+exp007,occ,normal_boundary,168324,7.6276,4.7624,16.8685,0.2274
+exp007,occ,occlusion_boundary,12429,12.1075,6.0701,28.4125,0.3325
