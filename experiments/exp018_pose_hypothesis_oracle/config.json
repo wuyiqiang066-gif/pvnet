@@ -1,0 +1,24 @@
+{
+  "cls": "cat",
+  "n_img": 20,
+  "question": "D1 ~180deg flips: correct hypothesis exists but selection failed (CASE A) vs correct pose excluded from candidate space by keypoint geometry (CASE B) vs reprojection objective ambiguity (CASE C)",
+  "data": "EXP016 raw_occ_D{0,1}.npz bit-identical reuse; image IDs asserted == EXP017",
+  "pnp": "original Evaluator.evaluate -> pnp (cv2.SOLVEPNP_ITERATIVE); UNMODIFIED",
+  "candidate_accessibility": "cv2.solvePnP SOLVEPNP_ITERATIVE exposes ONE deterministic solution; no candidate list/iterates/inliers accessible from Python; instrumenting OpenCV internals requires reimplementing the solver (forbidden) or changing flags (forbidden); solvePnPGeneric banned; uncertainty_pnp is a different solver (banned as new solver); voting RANSAC yields no pose candidates => PARTIAL-EVIDENCE MODE per protocol section 2/7",
+  "observable_poses": "pose_pred (solver output) and pose_gt (rot 0 by construction); correct_hypothesis_exists (rot<10deg) is TRUE on every image among observable poses -- vacuously; the informative quantity is the objective ranking J_gt vs J_pred",
+  "objective_oracle": {
+    "definition": "J(pose) = mean_i || project_K(kp3d_Farthest9, pose)_i - kp_input_i || (px), original Projector.project_K, original linemod intrinsics, the SAME 9 3D points the solver consumed",
+    "J_pred": "fit of the solver-returned pose to the input keypoints (its converged objective value)",
+    "J_gt": "fit of the correct (GT) pose to the input keypoints",
+    "delta": "J_gt - J_pred; delta > +tie_eps -> SELECTION_FAILURE (correct fits strictly better, solver left it unfound); delta < -tie_eps -> REPROJECTION_AMBIGUITY (wrong pose fits strictly better; Type D; ~180deg qualifier: wrong rot > 150deg recorded); |delta| <= tie_eps -> UNRESOLVED",
+    "tie_eps_px": 0.001,
+    "ambiguity_rot_gt_deg": 150.0,
+    "NO_CORRECT_HYPOTHESIS": "NOT assignable without the candidate space; recorded 0 with caveat (candidate hypotheses are not exposed by the current implementation, therefore EXP018 can only provide partial evidence)"
+  },
+  "decision_rules_pre_registered": {
+    "order": "Check B reproduction must PASS first, else STOP (report mismatch, no interpretation)",
+    "rule": "among the D1 flip(>90deg) images, decision by PLURALITY of outcomes {SELECTION_FAILURE, REPROJECTION_AMBIGUITY(wrong rot>150deg), UNRESOLVED}: GO-A if SELECTION_FAILURE plurality; GO-C if REPROJECTION_AMBIGUITY plurality; STOP if UNRESOLVED plurality or an exact tie between the top two; GO-B strict condition (correct_hypothesis_exists == False in the candidate space) is NOT verifiable without candidate access -> documented as limitation; mean delta over D1 flip images reported as descriptive support",
+    "forbidden": "no solver/flag/threshold/seed/keypoint/GT modification; no follow-up experiment designed here"
+  },
+  "language_limits": "cat-only, 20-image mechanism diagnosis; no significance claims"
+}

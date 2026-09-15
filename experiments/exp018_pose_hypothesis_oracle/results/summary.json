@@ -1,0 +1,230 @@
+{
+  "decision": "GO-C",
+  "rationale": "REPROJECTION_AMBIGUITY plurality (9/14 D1 flips, wrong rot>150deg): the ~180deg pose fits the input keypoints strictly better than the correct pose -> the original reprojection objective itself is pose-ambiguous for the D1 keypoint configuration. NOTE: without candidate-space access this is also the strongest available evidence for the CASE B geometric reading (a perfect objective-based selector would also choose wrong); GO-B strict condition is not verifiable here (documented limitation).",
+  "diagnosis_counts": {
+    "D0": {
+      "NORMAL": 16,
+      "SELECTION_FAILURE": 1,
+      "NO_CORRECT_HYPOTHESIS": 0,
+      "REPROJECTION_AMBIGUITY": 3,
+      "UNRESOLVED": 0,
+      "REPROJECTION_AMBIGUITY_rot_gt150": 2,
+      "n_flip": 4,
+      "mean_delta_flip_px": 73.93782875000001,
+      "median_delta_flip_px": 5.4972805000000005
+    },
+    "D1": {
+      "NORMAL": 6,
+      "SELECTION_FAILURE": 4,
+      "NO_CORRECT_HYPOTHESIS": 0,
+      "REPROJECTION_AMBIGUITY": 10,
+      "UNRESOLVED": 0,
+      "REPROJECTION_AMBIGUITY_rot_gt150": 9,
+      "n_flip": 14,
+      "mean_delta_flip_px": -120.47613957142859,
+      "median_delta_flip_px": 0.40384149999999996
+    }
+  },
+  "d1_flip_images": [
+    "color_00024.png",
+    "color_00025.png",
+    "color_00026.png",
+    "color_00027.png",
+    "color_00028.png",
+    "color_00033.png",
+    "color_00035.png",
+    "color_00037.png",
+    "color_00038.png",
+    "color_00039.png",
+    "color_00040.png",
+    "color_00041.png",
+    "color_00042.png",
+    "color_00043.png"
+  ],
+  "d1_flip_detail": [
+    {
+      "rgb": "color_00024.png",
+      "rot": 165.5574,
+      "flip150": true,
+      "J_pred": 6.394991,
+      "J_gt": 15.991409,
+      "delta": 9.596418,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00025.png",
+      "rot": 147.4644,
+      "flip150": false,
+      "J_pred": 3.802835,
+      "J_gt": 398.068348,
+      "delta": 394.265513,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00026.png",
+      "rot": 161.5427,
+      "flip150": true,
+      "J_pred": 2001.281857,
+      "J_gt": 11.643346,
+      "delta": -1989.638511,
+      "diagnosis": "SELECTION_FAILURE"
+    },
+    {
+      "rgb": "color_00027.png",
+      "rot": 108.9261,
+      "flip150": false,
+      "J_pred": 589.725805,
+      "J_gt": 479.63992,
+      "delta": -110.085885,
+      "diagnosis": "SELECTION_FAILURE"
+    },
+    {
+      "rgb": "color_00028.png",
+      "rot": 171.5912,
+      "flip150": true,
+      "J_pred": 2.316546,
+      "J_gt": 6.999791,
+      "delta": 4.683246,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00033.png",
+      "rot": 177.9822,
+      "flip150": true,
+      "J_pred": 0.868715,
+      "J_gt": 1.64854,
+      "delta": 0.779825,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00035.png",
+      "rot": 176.5324,
+      "flip150": true,
+      "J_pred": 0.843347,
+      "J_gt": 2.727633,
+      "delta": 1.884287,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00037.png",
+      "rot": 180.0,
+      "flip150": true,
+      "J_pred": 1.261562,
+      "J_gt": 1.059413,
+      "delta": -0.202149,
+      "diagnosis": "SELECTION_FAILURE"
+    },
+    {
+      "rgb": "color_00038.png",
+      "rot": 178.6629,
+      "flip150": true,
+      "J_pred": 1.744467,
+      "J_gt": 2.073282,
+      "delta": 0.328814,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00039.png",
+      "rot": 179.1685,
+      "flip150": true,
+      "J_pred": 1.584249,
+      "J_gt": 1.279111,
+      "delta": -0.305138,
+      "diagnosis": "SELECTION_FAILURE"
+    },
+    {
+      "rgb": "color_00040.png",
+      "rot": 178.9337,
+      "flip150": true,
+      "J_pred": 1.522529,
+      "J_gt": 1.813398,
+      "delta": 0.290869,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00041.png",
+      "rot": 178.2629,
+      "flip150": true,
+      "J_pred": 1.11328,
+      "J_gt": 1.4578,
+      "delta": 0.34452,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00042.png",
+      "rot": 179.0011,
+      "flip150": true,
+      "J_pred": 0.96045,
+      "J_gt": 1.889524,
+      "delta": 0.929074,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00043.png",
+      "rot": 179.0317,
+      "flip150": true,
+      "J_pred": 0.998484,
+      "J_gt": 1.461647,
+      "delta": 0.463163,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    }
+  ],
+  "d0_flip_detail": [
+    {
+      "rgb": "color_00024.png",
+      "rot": 180.0,
+      "J_pred": 4.845409,
+      "J_gt": 14.08345,
+      "delta": 9.238041,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00025.png",
+      "rot": 149.3291,
+      "J_pred": 4.319068,
+      "J_gt": 399.161707,
+      "delta": 394.842639,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    },
+    {
+      "rgb": "color_00027.png",
+      "rot": 108.9261,
+      "J_pred": 589.725805,
+      "J_gt": 479.63992,
+      "delta": -110.085885,
+      "diagnosis": "SELECTION_FAILURE"
+    },
+    {
+      "rgb": "color_00043.png",
+      "rot": 176.2012,
+      "J_pred": 0.855895,
+      "J_gt": 2.612415,
+      "delta": 1.75652,
+      "diagnosis": "REPROJECTION_AMBIGUITY"
+    }
+  ],
+  "residual_geometry_validation": {
+    "source": "EXP017 results/residual_geometry.csv (read-only)",
+    "d1_flip_vs_stable": {
+      "flip": {
+        "n": 14,
+        "kp_median_px": 1.8801,
+        "coherent_shift_norm_px": 1.0323885000000002,
+        "relative_scatter_mean_px": 1.669613,
+        "anisotropy_ratio": 2.7826105
+      },
+      "stable": {
+        "n": 6,
+        "kp_median_px": 1.9906000000000001,
+        "coherent_shift_norm_px": 1.409269,
+        "relative_scatter_mean_px": 1.774695,
+        "anisotropy_ratio": 6.938487
+      }
+    },
+    "checks": {
+      "flip_anisotropy_lower": true,
+      "flip_coherent_shift_smaller": true,
+      "magnitude_not_explanatory": true
+    }
+  }
+}

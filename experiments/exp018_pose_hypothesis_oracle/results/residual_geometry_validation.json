@@ -1,0 +1,24 @@
+{
+  "source": "EXP017 results/residual_geometry.csv (read-only)",
+  "d1_flip_vs_stable": {
+    "flip": {
+      "n": 14,
+      "kp_median_px": 1.8801,
+      "coherent_shift_norm_px": 1.0323885000000002,
+      "relative_scatter_mean_px": 1.669613,
+      "anisotropy_ratio": 2.7826105
+    },
+    "stable": {
+      "n": 6,
+      "kp_median_px": 1.9906000000000001,
+      "coherent_shift_norm_px": 1.409269,
+      "relative_scatter_mean_px": 1.774695,
+      "anisotropy_ratio": 6.938487
+    }
+  },
+  "checks": {
+    "flip_anisotropy_lower": true,
+    "flip_coherent_shift_smaller": true,
+    "magnitude_not_explanatory": true
+  }
+}

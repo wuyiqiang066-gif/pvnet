@@ -1,0 +1,6 @@
+{
+  "reproduction_ok": true,
+  "pose_bitmatch_npz": true,
+  "proj_gt_vs_dataset_gt_kps_max_px": 1.676248172294103e-05,
+  "note": "flips exact + rot<1e-3deg + reproj<1e-3px + trans<1e-2mm vs EXP017 per_image.csv; C1/C2 fresh poses bit-match EXP016 npz pred_pose"
+}
