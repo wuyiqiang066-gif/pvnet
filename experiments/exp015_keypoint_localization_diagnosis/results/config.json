@@ -1,0 +1,22 @@
+{
+  "cls": "cat",
+  "n_img": 20,
+  "ckpt": "data/model/cat_linemod_train/199.pth",
+  "variable": "vertex prediction ONLY: D0 original convraw[3] 1x1 head vs EXP013 final D1 decoder (zero-init 3x3 cross-channel residual), loaded from EXP014 persisted states; NO re-fitting",
+  "frozen": "199.pth entire PVNet frozen; D1 state loaded and re-verified against EXP013 recorded held-out direction numbers (tol 0.01 deg) before use",
+  "data": "EXP013 HELD-OUT set only, IDs loaded from EXP013 results/image_ids.json (identical to EXP014 usage): 20 LIN val_real_set[20:40], 20 OCC test_real_set[20:40]; FIT-excluded asserted",
+  "voting": "original ransac_voting_layer_v3, params from configs/exp001_reliability_voting_scratch.json (round_hyp_num=128, inlier_thresh=0.99, max_num=100); seed 0 re-applied before every call for both branches; NO modification",
+  "pnp": "NOT run in this experiment (keypoint localization only). Optional explanation-only diagnosis reuses EXP014 per_image_pose.csv (standard PnP outputs) to count ~180-deg flip cases",
+  "metrics": "keypoint pixel error vs GT projected keypoints: pooled mean/median/p75/p90/p95/max, keypoint-level catastrophic rates (>20/>50/>100 px), image-level catastrophic images (>100 px max or NaN), paired per-image better/worse/tie (tie <=1e-6), non-catastrophic subset (branch-specific + common) mean/median/p90",
+  "identity_check": "(a) D0 branch == original net.forward pipeline (<1e-5) on every held-out image (seg logits/vertex/mask/voted kps); (b) D1 branch seg logits and argmax mask BIT-IDENTICAL to D0",
+  "decision_rules": "Pre-registered BEFORE the run: GO iff OCC pooled median D1<D0 AND OCC paired mean-based better>worse AND OCC common non-catastrophic subset median D1<D0; STOP iff OCC median D1>=D0 AND paired better<=worse; WEAK otherwise",
+  "cat_thresholds": {
+    "keypoint_px": [
+      20.0,
+      50.0,
+      100.0
+    ],
+    "image_px": 100.0,
+    "tie_eps": 1e-06
+  }
+}
