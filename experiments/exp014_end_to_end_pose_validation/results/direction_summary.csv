@@ -1,0 +1,5 @@
+split,decoder,count,mean_deg,median_deg,p90_deg,bad_rate_gt10deg,endpoint_unit_mean
+linemod,D0,422693,2.436,1.485,5.025,0.0263,0.0423
+linemod,D1,422693,2.541,1.629,5.094,0.0270,0.0441
+occ,D0,208882,6.156,3.551,12.873,0.1460,0.1053
+occ,D1,208882,4.936,2.873,9.975,0.0997,0.0847

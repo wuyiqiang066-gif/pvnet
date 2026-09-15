@@ -1,0 +1,5 @@
+split,decoder,n_images,ADD_frac(<0.1d),ADD_mean_dist_mm,2D_proj_frac(<5px),2D_proj_mean_px,5cm5deg_frac,keypoint_mean_px,keypoint_median_px
+linemod,D0,20,0.6500,13.27,1.0000,1.082,1.0000,1.226,1.111
+linemod,D1,20,0.7000,11.93,1.0000,1.139,1.0000,1.310,1.235
+occ,D0,20,0.0500,468.65,0.8000,164.423,0.1000,47.410,3.150
+occ,D1,20,0.0000,1632.67,0.7500,2167.347,0.0500,47.139,2.143

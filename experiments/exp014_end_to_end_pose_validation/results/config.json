@@ -1,0 +1,13 @@
+{
+  "cls": "cat",
+  "n_img": 20,
+  "ckpt": "data/model/cat_linemod_train/199.pth",
+  "variable": "vertex prediction ONLY: D0 original convraw[3] 1x1 head vs EXP013 frozen D1 decoder (zero-init 3x3 cross-channel residual, 9842 params); everything downstream identical",
+  "frozen": "199.pth entire PVNet frozen; D1 loaded/regenerated from EXP013 final state (EXP013 fitting protocol verbatim, seed 0; verified against EXP013 recorded held-out direction numbers before use)",
+  "data": "EXP013 HELD-OUT set only, IDs loaded from EXP013 results/image_ids.json (20 LIN val_real_set[20:40], 20 OCC test_real_set first half [20:40]); FIT-excluded asserted",
+  "voting": "original ransac_voting_layer_v3, params from configs/exp001_reliability_voting_scratch.json (round_hyp_num=128, inlier_thresh=0.99, max_num=100); seed 0 re-applied before every call for both branches; NO modification",
+  "pnp": "original Evaluator standard PnP path (pnp, SOLVEPNP_ITERATIVE, projector.intrinsic_matrix['linemod'], Farthest 3D points); uncertainty PnP NOT used (project baseline is standard PnP)",
+  "metrics": "L1 direction (EXP006/008 pool), L2 keypoint pixel error (pooled 9 kps x 20 imgs), L3 ADD/2D-projection/5cm5deg (original Evaluator recorders); no proximity analysis (per spec)",
+  "identity_check": "D0 branch seg/vertex/mask/keypoints must equal original net.forward pipeline (<1e-5) on all held-out images",
+  "go_stop": "HELD-OUT OCC ADD improvement >= 10% -> GO-C; < 3% -> STOP-C; else BORDERLINE"
+}
