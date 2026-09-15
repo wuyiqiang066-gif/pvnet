@@ -1,0 +1,28 @@
+{
+  "cls": "cat",
+  "n_img": 20,
+  "ckpt": "data/model/cat_linemod_train/199.pth",
+  "variable": "vertex prediction ONLY: D0 original convraw[3] 1x1 head vs EXP013 final D1 decoder loaded from EXP014 persisted states; NO re-fitting; full original pipeline observed (voting AND original standard PnP), nothing modified",
+  "frozen": "199.pth entire PVNet frozen; D1 verified against EXP013 recorded held-out direction numbers (tol 0.01 deg) before use",
+  "data": "EXP015 results/image_ids.json heldout (asserted == EXP013 == EXP014 usage): 20 LIN val_real_set[20:40], 20 OCC test_real_set[20:40]; FIT-excluded asserted",
+  "voting": "original ransac_voting_layer_v3 (round_hyp_num=128, inlier_thresh=0.99, max_num=100, asserted); seed 0 re-applied before every call; NO modification; internal vote-count statistics NOT available without modifying voting -> not recorded (per spec)",
+  "pnp": "original Evaluator standard PnP path (pnp, SOLVEPNP_ITERATIVE, linemod intrinsics, Farthest 3D points) EXACTLY as EXP014; NO solver/threshold change; rotation error via trace formula; flip = rot_err > 90 deg (>120/>150/>170 also recorded); reprojection = Evaluator mean 2D reprojection px; \"low reprojection\" = < 5 px (project official 2D threshold)",
+  "definitions": {
+    "flip_deg": [
+      90.0,
+      120.0,
+      150.0,
+      170.0
+    ],
+    "voting_catastrophic": "max kp error > 100 px (EXP015 def)",
+    "reproj_low_px": 5.0,
+    "tie_eps": 1e-06
+  },
+  "decision_rules": "Pre-registered: reproduction_ok = OCC >90deg flips reproduce EXP015 reference (D0 4/20, D1 14/20); GO-B iff reproduction_ok AND D1 majority KP improved AND D1 non-cat flip rate >= 25% AND >=1 D1 flip survives excluding catastrophic AND >=30% of D1 flipped non-cat poses have reprojection < 5px; GO-A iff D1 non-cat flip rate < 25% AND D1 majority KP improved; STOP otherwise",
+  "reference_flip_counts": {
+    "linemod_D0": 0,
+    "linemod_D1": 0,
+    "occ_D0": 4,
+    "occ_D1": 14
+  }
+}
