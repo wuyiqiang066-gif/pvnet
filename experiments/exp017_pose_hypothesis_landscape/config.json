@@ -1,0 +1,42 @@
+{
+  "cls": "cat",
+  "n_img": 20,
+  "question": "EXP016 D1 ~180deg pose flips: intrinsic keypoint/PnP ambiguity (A) vs residual-geometry-associated basin selection under stable GT (B) vs perturbation-sensitive numerical instability (C) vs inconclusive (D)",
+  "data": "EXP016 results/raw_predictions/raw_occ_D{0,1}.npz reused bit-identically (voted keypoints, GT projected keypoints, GT pose); occ image ids == EXP015 heldout (asserted == EXP016 per_image.csv occ rows); NO re-sampling",
+  "conditions": {
+    "C0_gt": "2D keypoints = GT projected keypoints (EXP016 npz gt_kps)",
+    "C1_D0": "EXP016 D0 voted keypoints (reference: 4/20 flips >90deg)",
+    "C2_D1": "EXP016 D1 voted keypoints (reference: 14/20 flips >90deg)",
+    "C3_D0_noise": "C1 + eps (seed=0, sigma=1.0px, single run)",
+    "C4_D1_noise": "C2 + SAME eps realization as C3"
+  },
+  "noise": {
+    "seed": 0,
+    "sigma_px": 1.0,
+    "n_runs": 1,
+    "sigma_sweep": "FORBIDDEN",
+    "extra_seeds": "FORBIDDEN"
+  },
+  "pnp": "original Evaluator.evaluate -> pnp (cv2.SOLVEPNP_ITERATIVE, zero dist coeffs, 'linemod' intrinsics, VotingType.Farthest 3D points, cat ply model) -- UNMODIFIED; no flag/initialization/iteration/RANSAC/refinement/multi-hypothesis/flip-correction/GT-based-solution-selection",
+  "flip_definition": "rotation_error = acos((trace(R_pred @ R_gt^T)-1)/2); flip = rot > 90/120/150/170 deg (EXP016 definition)",
+  "add_note": "cat is non-symmetric -> original Evaluator add_metric (ADD); reported as in EXP016",
+  "median_reprojection_note": "median reprojection uses the SAME original projector/model/K as Evaluator.projection_2d (observation only; mean value is the Evaluator's own proj_mean_diffs, cross-checked < 1e-9 px)",
+  "reproduction_reference": {
+    "C1_D0_flip_gt90": 4,
+    "C2_D1_flip_gt90": 14,
+    "source": "EXP015/EXP016 standard-PnP outputs"
+  },
+  "checks": {
+    "check_A": "C0 GT PnP: flip counts/rot/reproj; INTRINSIC_AMBIGUITY_SUSPECTED if any C0 rot > 170 deg; C1-C4 still completed, no extra experiments",
+    "check_B": "C1/C2 must reproduce EXP016 occ D0/D1 per-image flip flags EXACTLY and rot within 1e-3 deg (reproj within 1e-3 px); inputs bit-identical, so any mismatch -> STOP (no interpretation of C3/C4)",
+    "check_C": "noise identity: same eps realization C3/C4, max elementwise diff < 1e-12"
+  },
+  "decision_rules_pre_registered": {
+    "priority": "A -> C -> B -> D, first match wins (C before B: if matched noise erases the D0/D1 gap, instability dominates and geometry association cannot stand)",
+    "CASE_A": "C0 flip_gt90 >= 3 (multiple images) -> intrinsic ambiguity; FORBIDDEN to design a solver afterwards",
+    "CASE_C": "C0 stable (flip_gt90 <= 1) AND (C3 flip_gt90 >= 10 OR C4 flip_gt90 >= 10) AND |C3 - C4| flip_gt90 <= 4 -> perturbation-sensitive numerical instability (D0/D1 difference largely disappears under matched perturbation)",
+    "CASE_B": "C0 stable AND C1 flip_gt90 <= 6 AND C2 flip_gt90 >= 10 AND D1 flip-group kp_median <= 1.5x stable-group (magnitude not explanatory) AND >=1 of {relative_scatter_mean, coherent_shift_norm, anisotropy_ratio} shows D1 flip/stable median ratio >= 1.5 or <= 1/1.5 -> residual-geometry-associated basin selection (association language ONLY, no causality beyond diagnosis)",
+    "CASE_D": "otherwise INCONCLUSIVE; no sigma sweep / seeds / datasets / new solver"
+  },
+  "language_limits": "cat-only, 20-image mechanism diagnosis; no significance claims"
+}

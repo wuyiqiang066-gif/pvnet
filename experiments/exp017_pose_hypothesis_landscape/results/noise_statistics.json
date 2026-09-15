@@ -1,0 +1,16 @@
+{
+  "seed": 0,
+  "sigma_px": 1.0,
+  "distribution": "eps_x, eps_y ~ N(0, 1.0 px^2) iid per keypoint/coordinate",
+  "realization": "ONE realization shared by C3 and C4 (identical per-image/keypoint)",
+  "n": 180,
+  "mean_norm_px": 1.2492153945734565,
+  "median_norm_px": 1.1613889115278127,
+  "p90_norm_px": 2.1795547378556743,
+  "theory_mean_norm_px": 1.2533141373155001,
+  "identity": {
+    "same_realization": true,
+    "max_abs_diff": 1.4210854715202004e-14,
+    "tol": 1e-12
+  }
+}

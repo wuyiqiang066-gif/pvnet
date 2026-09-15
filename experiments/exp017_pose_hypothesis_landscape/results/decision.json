@@ -1,0 +1,98 @@
+{
+  "flip_counts_gt90": {
+    "C0_gt": 0,
+    "C1_D0": 4,
+    "C2_D1": 14,
+    "C3_D0_noise": 6,
+    "C4_D1_noise": 17
+  },
+  "flip_counts_all": {
+    "C0_gt": {
+      "gt90": 0,
+      "gt120": 0,
+      "gt150": 0,
+      "gt170": 0
+    },
+    "C1_D0": {
+      "gt90": 4,
+      "gt120": 3,
+      "gt150": 2,
+      "gt170": 2
+    },
+    "C2_D1": {
+      "gt90": 14,
+      "gt120": 13,
+      "gt150": 12,
+      "gt170": 10
+    },
+    "C3_D0_noise": {
+      "gt90": 6,
+      "gt120": 6,
+      "gt150": 5,
+      "gt170": 4
+    },
+    "C4_D1_noise": {
+      "gt90": 17,
+      "gt120": 17,
+      "gt150": 17,
+      "gt170": 14
+    }
+  },
+  "reproduction": {
+    "check_A_intrinsic_suspect": false,
+    "check_B_ok": true,
+    "check_C_ok": true
+  },
+  "noise": {
+    "seed": 0,
+    "sigma_px": 1.0,
+    "distribution": "eps_x, eps_y ~ N(0, 1.0 px^2) iid per keypoint/coordinate",
+    "realization": "ONE realization shared by C3 and C4 (identical per-image/keypoint)",
+    "n": 180,
+    "mean_norm_px": 1.2492153945734565,
+    "median_norm_px": 1.1613889115278127,
+    "p90_norm_px": 2.1795547378556743,
+    "theory_mean_norm_px": 1.2533141373155001,
+    "identity": {
+      "same_realization": true,
+      "max_abs_diff": 1.4210854715202004e-14,
+      "tol": 1e-12
+    }
+  },
+  "d1_flip_vs_stable": {
+    "flip": {
+      "n": 14,
+      "kp_mean_px": 1.9814,
+      "kp_median_px": 1.8801,
+      "coherent_shift_norm_px": 1.032388846538566,
+      "relative_scatter_mean_px": 1.6696132548726557,
+      "anisotropy_ratio": 2.782610266310639,
+      "mean_reprojection_error_px": 1.58705,
+      "rotation_error_deg": 178.12255
+    },
+    "stable": {
+      "n": 6,
+      "kp_mean_px": 2.2534,
+      "kp_median_px": 1.9906000000000001,
+      "coherent_shift_norm_px": 1.4092691921364369,
+      "relative_scatter_mean_px": 1.7746953703286434,
+      "anisotropy_ratio": 6.938486768016131,
+      "mean_reprojection_error_px": 2.0330000000000004,
+      "rotation_error_deg": 6.5348
+    }
+  },
+  "d1_geom_separation_ratios_flip_over_stable": {
+    "relative_scatter_mean_px": 0.9407886462021207,
+    "coherent_shift_norm_px": 0.7325703650510345,
+    "anisotropy_ratio": 0.40103993267486615
+  },
+  "d0_vs_d1_geom_median_ratios": {
+    "relative_scatter_mean_px": 0.6839623412580111,
+    "coherent_shift_norm_px": 0.6946069364414325,
+    "anisotropy_ratio": 0.8291558375517768
+  },
+  "d1_mag_ratio_flip_over_stable_kp_median": 0.9444890987641917,
+  "decision": "CASE_B",
+  "rationale": "C0 stable (0/20); C1 4/20 vs C2 14/20 reproduced; flip not explained by KP magnitude (flip/stable kp_median ratio 0.94); flip is associated with keypoint residual geometry (see ratios). Association language ONLY.",
+  "rules": "pre-registered in results/config.json (priority A -> C -> B -> D)"
+}
