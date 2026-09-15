@@ -1,0 +1,200 @@
+{
+  "seed": 0,
+  "n_img": 20,
+  "kp_per_img": 9,
+  "image_ids": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "occ_rgb": [
+    "color_00024.png",
+    "color_00025.png",
+    "color_00026.png",
+    "color_00027.png",
+    "color_00028.png",
+    "color_00029.png",
+    "color_00030.png",
+    "color_00031.png",
+    "color_00032.png",
+    "color_00033.png",
+    "color_00034.png",
+    "color_00035.png",
+    "color_00036.png",
+    "color_00037.png",
+    "color_00038.png",
+    "color_00039.png",
+    "color_00040.png",
+    "color_00041.png",
+    "color_00042.png",
+    "color_00043.png"
+  ],
+  "cls": "cat",
+  "vote_type": "VotingType.Farthest",
+  "pnp_path": "lib.utils.evaluation_utils.Evaluator.evaluate -> pnp() -> cv2.solvePnP(SOLVEPNP_ITERATIVE); UNMODIFIED (no flags/threshold/termination change; no solvePnPGeneric; no new solver)",
+  "anchor_correction_note": "first draft used POOLED RMS/mean-vector anchors; REJECTED before any synthetic PnP ran (pooled RMS 139.78 px dominated by color_00025/27); final anchors are median per-image statistics, robust to the 2/20 pathological images; no synthetic result existed at correction time",
+  "objective": {
+    "definition": "J(pose) = mean_i || project_K(kp3d_Farthest9, pose)_i - kp_input_i || (px); original Projector, linemod intrinsics",
+    "J_pred": "fit of solver-returned pose to input keypoints",
+    "J_gt": "fit of GT pose to input keypoints",
+    "delta_J": "J_gt - J_pred (EXP018 corrected sign); delta_J > 0 <=> J_pred < J_gt <=> returned pose fits input keypoints strictly better than the correct pose (REPROJECTION_AMBIGUITY direction); delta_J < 0 <=> correct pose fits better (SELECTION_FAILURE direction)"
+  },
+  "flip": {
+    "thresholds_deg": [
+      90.0,
+      120.0,
+      150.0,
+      170.0
+    ],
+    "primary_gt_deg": 150.0,
+    "source": "EXP016/017 definition reused"
+  },
+  "scales": [
+    0.5,
+    1.0,
+    1.5
+  ],
+  "anisotropy_levels": {
+    "ISOTROPIC": 1.0,
+    "MODERATE": "reserved (sqrt(D1_ANISO)); NOT run in round 1 per protocol section 5/10",
+    "D1_LIKE": 3.56662741835361
+  },
+  "coherent_shift_levels": {
+    "ZERO": 0.0,
+    "D1_LIKE": 1.2444628385429386
+  },
+  "d1_like_targets": {
+    "anisotropy_median": 3.56662741835361,
+    "coherent_shift_median": 1.2444628385429386,
+    "rms_anchor_median_per_image": 2.4234698777666948,
+    "meannorm_anchor_median_per_image": 2.131921963416262,
+    "unit_dir_u": [
+      -0.9991127404760212,
+      0.04211569563113574
+    ],
+    "u_source": "mean of per-image residual mean vectors over fixed CLEAN18 (excl color_00026/27)",
+    "rejected_pooled_rms": 139.77739726488295,
+    "source": "computed from EXP016 raw D1 residuals with numpy ONLY before any PnP call (anti-circularity, protocol section 22); cross-checked against EXP017 residual_geometry.csv medians (assert <1e-3)"
+  },
+  "magnitude_anchor": "1.0x scale == median per-image RMS of real D1 residuals; per-image RMS(r) == scale * RMS_anchor EXACTLY by construction (uniform dose across images)",
+  "normalization_rule": "per image: w=A z; w <- w - mean(w); mu = shift * scale * SHIFT_TARGET * u; s = sqrt(T^2 - ||mu||^2)/rms(w); r = s*w + mu; T = scale*D1_RMS; assert T > ||mu||; kp = GT + r; achieved per-image RMS exact, coherent shift exact, anisotropy exact up to sample noise; mean_norm reported not forced (geometry-coupled; RMS is the pre-registered magnitude statistic)",
+  "shared_realization": "ONE base z ~ N(0,I) (20,9,2), numpy default_rng(0), generated ONCE after config write; every synthetic condition is a deterministic transform of the same z (protocol section 7; no per-condition re-sampling)",
+  "conditions": [
+    {
+      "name": "C0_gt",
+      "group": "control",
+      "scale": null,
+      "geometry": null,
+      "shift": null
+    },
+    {
+      "name": "C1_D0_real",
+      "group": "control",
+      "scale": null,
+      "geometry": null,
+      "shift": null
+    },
+    {
+      "name": "C2_D1_real",
+      "group": "control",
+      "scale": null,
+      "geometry": null,
+      "shift": null
+    },
+    {
+      "name": "ISO_S05",
+      "group": "grid",
+      "scale": 0.5,
+      "geometry": "iso",
+      "shift": 0.0
+    },
+    {
+      "name": "ISO_S10",
+      "group": "grid",
+      "scale": 1.0,
+      "geometry": "iso",
+      "shift": 0.0
+    },
+    {
+      "name": "ISO_S15",
+      "group": "grid",
+      "scale": 1.5,
+      "geometry": "iso",
+      "shift": 0.0
+    },
+    {
+      "name": "D1G_S05",
+      "group": "grid",
+      "scale": 0.5,
+      "geometry": "d1g",
+      "shift": 1.0
+    },
+    {
+      "name": "D1G_S10",
+      "group": "grid",
+      "scale": 1.0,
+      "geometry": "d1g",
+      "shift": 1.0
+    },
+    {
+      "name": "D1G_S15",
+      "group": "grid",
+      "scale": 1.5,
+      "geometry": "d1g",
+      "shift": 1.0
+    },
+    {
+      "name": "ISO_S10_SH",
+      "group": "mechanism",
+      "scale": 1.0,
+      "geometry": "iso",
+      "shift": 1.0
+    },
+    {
+      "name": "D1G_S10_NS",
+      "group": "mechanism",
+      "scale": 1.0,
+      "geometry": "d1g",
+      "shift": 0.0
+    }
+  ],
+  "condition_aliases": {
+    "C3_isotropic_matched": "ISO_S10",
+    "C4_d1_like": "D1G_S10"
+  },
+  "pathological_policy": {
+    "clean18": "ALL images except color_00026.png and color_00027.png (fixed from EXP018 before any EXP019 result; result-independent)",
+    "solver_divergence": "J_pred > 100 px -> SOLVER_DIVERGENCE flag; reported separately, never counted as ambiguity",
+    "catastrophic_keypoint": "median input keypoint error > 100 px -> CATASTROPHIC_KEYPOINT flag (real-residual conds)"
+  },
+  "gate": {
+    "c0": "GT keypoints: flips 0/20 at all thresholds, max rot < 1e-3 deg, max official reproj < 1e-2 px",
+    "c1_c2": "D0/D1 real keypoints: flips exact vs EXP017 (4/20, 14/20 at >90deg) + rot<1e-3/reproj<1e-3/trans<1e-2 + poses bit-match EXP016 npz (<1e-9) + J_pred/J_gt match EXP018 objective_oracle.csv (<1e-4)",
+    "on_failure": "STOP (exit 1), no synthetic run, no interpretation"
+  },
+  "decision_rules_pre_registered": {
+    "primary": "flip rot>150deg on ALL 20; CLEAN 18 reported as required support (decision invalidated to GO-C if CLEAN 18 overall gap sign contradicts ALL 20)",
+    "GO_A": "geometry-causal (protocol section 16 symmetric form; direction reported): g_k = flip150(D1G,k) - flip150(ISO,k) for k in {0.5,1.0,1.5}: (i) all g_k >= 0 with sum >= 3 (D1-promoting) OR all g_k <= 0 with -sum >= 3 (isotropy-promoting); (ii) RA-type evidence: RA(D1G,k) >= RA(ISO,k) at >= 2/3 scales in the promoted direction, RA := flip150 AND delta_J > 0; (iii) cross-scale punchline: flip150(promoted geometry @1.0x) >= flip150(other geometry @1.5x). Conclusion: residual geometry, not magnitude alone, is causally sufficient to move the objective toward the ~180 deg basin; the promoted direction is reported explicitly (D1-promoting matches protocol section 15 wording; isotropy-promoting matches EXP017 within-D1 association and is still geometry-causal per section 16)",
+    "GO_B": "magnitude-only: |g_k| <= 1 at every scale AND flip150 rises by >= 3 from 0.5x to 1.5x within at least one geometry family; STOP, no geometry mining",
+    "GO_C": "mixed/inconclusive otherwise; conservative wording only"
+  },
+  "forbidden": "no solver/flag/threshold/seed/GT/intrinsics/3D-points/image-set change; no level added post hoc; D1-like targets frozen above BEFORE any PnP (protocol section 21/22)",
+  "language_limits": "cat-only, 20-image mechanism diagnosis; association->causal evidence on synthetic residuals only; no significance claims"
+}

@@ -1,0 +1,94 @@
+{
+  "rule": "per-image RMS == scale * D1_RMS EXACT by construction; mean_norm reported not forced; audit = max |achieved - target| over images",
+  "rms_max_abs_dev_px": 8.881784197001252e-16,
+  "per_condition": [
+    {
+      "condition": "ISO_S05",
+      "RMS": 1.2117,
+      "target_rms": 1.2117,
+      "mean_norm": 1.0874,
+      "target_meannorm_at_scale": 1.066,
+      "mean_norm_over_RMS": 0.8974,
+      "d1_real_mean_norm_over_RMS": 0.8797,
+      "anisotropy_achieved": 2.669,
+      "anisotropy_target": 1.0
+    },
+    {
+      "condition": "ISO_S10",
+      "RMS": 2.4235,
+      "target_rms": 2.4235,
+      "mean_norm": 2.1748,
+      "target_meannorm_at_scale": 2.1319,
+      "mean_norm_over_RMS": 0.8974,
+      "d1_real_mean_norm_over_RMS": 0.8797,
+      "anisotropy_achieved": 2.669,
+      "anisotropy_target": 1.0
+    },
+    {
+      "condition": "ISO_S15",
+      "RMS": 3.6352,
+      "target_rms": 3.6352,
+      "mean_norm": 3.2622,
+      "target_meannorm_at_scale": 3.1979,
+      "mean_norm_over_RMS": 0.8974,
+      "d1_real_mean_norm_over_RMS": 0.8797,
+      "anisotropy_achieved": 2.669,
+      "anisotropy_target": 1.0
+    },
+    {
+      "condition": "D1G_S05",
+      "RMS": 1.2117,
+      "target_rms": 1.2117,
+      "mean_norm": 1.0501,
+      "target_meannorm_at_scale": 1.066,
+      "mean_norm_over_RMS": 0.8666,
+      "d1_real_mean_norm_over_RMS": 0.8797,
+      "anisotropy_achieved": 4.114,
+      "anisotropy_target": 3.56662741835361
+    },
+    {
+      "condition": "D1G_S10",
+      "RMS": 2.4235,
+      "target_rms": 2.4235,
+      "mean_norm": 2.1001,
+      "target_meannorm_at_scale": 2.1319,
+      "mean_norm_over_RMS": 0.8666,
+      "d1_real_mean_norm_over_RMS": 0.8797,
+      "anisotropy_achieved": 4.114,
+      "anisotropy_target": 3.56662741835361
+    },
+    {
+      "condition": "D1G_S15",
+      "RMS": 3.6352,
+      "target_rms": 3.6352,
+      "mean_norm": 3.1502,
+      "target_meannorm_at_scale": 3.1979,
+      "mean_norm_over_RMS": 0.8666,
+      "d1_real_mean_norm_over_RMS": 0.8797,
+      "anisotropy_achieved": 4.114,
+      "anisotropy_target": 3.56662741835361
+    },
+    {
+      "condition": "ISO_S10_SH",
+      "RMS": 2.4235,
+      "target_rms": 2.4235,
+      "mean_norm": 2.145,
+      "target_meannorm_at_scale": 2.1319,
+      "mean_norm_over_RMS": 0.8851,
+      "d1_real_mean_norm_over_RMS": 0.8797,
+      "anisotropy_achieved": 2.669,
+      "anisotropy_target": 1.0
+    },
+    {
+      "condition": "D1G_S10_NS",
+      "RMS": 2.4235,
+      "target_rms": 2.4235,
+      "mean_norm": 2.1427,
+      "target_meannorm_at_scale": 2.1319,
+      "mean_norm_over_RMS": 0.8841,
+      "d1_real_mean_norm_over_RMS": 0.8797,
+      "anisotropy_achieved": 4.114,
+      "anisotropy_target": 3.56662741835361
+    }
+  ]
+}
