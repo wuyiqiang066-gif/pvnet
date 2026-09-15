@@ -1,0 +1,123 @@
+{
+  "seed": 0,
+  "n_img": 20,
+  "kp_per_img": 9,
+  "image_ids": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "occ_rgb": [
+    "color_00024.png",
+    "color_00025.png",
+    "color_00026.png",
+    "color_00027.png",
+    "color_00028.png",
+    "color_00029.png",
+    "color_00030.png",
+    "color_00031.png",
+    "color_00032.png",
+    "color_00033.png",
+    "color_00034.png",
+    "color_00035.png",
+    "color_00036.png",
+    "color_00037.png",
+    "color_00038.png",
+    "color_00039.png",
+    "color_00040.png",
+    "color_00041.png",
+    "color_00042.png",
+    "color_00043.png"
+  ],
+  "cls": "cat",
+  "vote_type": "VotingType.Farthest",
+  "pnp_path": "lib.utils.evaluation_utils.Evaluator.evaluate -> pnp() -> cv2.solvePnP(SOLVEPNP_ITERATIVE); UNMODIFIED (no flags/threshold/termination change; no solvePnPGeneric; no new solver)",
+  "geometry_closed_note": "EXP019 closed geometry mining (GO-C): anisotropy / coherent shift / covariance shape NOT studied here; residuals are isotropic Gaussian with zero coherent shift by construction",
+  "residual": {
+    "formula": "r_i(sigma) = sigma * z_i; z_i ~ N(0,I); NO mean removal, NO normalization, NO covariance shaping (protocol section 7: sampled mean need not be exactly zero and is NOT adjusted)",
+    "shared_realization": "ONE base z ~ N(0,I) (20,9,2), numpy default_rng(0), same seed/shape/order as EXP019 -> bit-identical base field; every level is the deterministic transform r = sigma * z of the SAME z (protocol section 8; no per-sigma re-sampling)",
+    "sigma_levels_px": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      1.75,
+      2.0,
+      2.5,
+      3.0,
+      4.0
+    ],
+    "magnitude_stats_recorded": [
+      "per-image RMS",
+      "per-condition RMS (mean over images; primary x-axis)",
+      "pooled RMS",
+      "mean_norm",
+      "median_norm",
+      "p90_norm",
+      "coherent shift (recorded to confirm ~0, NOT studied)"
+    ],
+    "actual_vs_nominal": "dose-response analysis uses ACTUAL RMS (protocol section 10); nominal sigma kept only as label"
+  },
+  "objective": {
+    "definition": "J(pose) = mean_i || project_K(kp3d_Farthest9, pose)_i - kp_input_i || (px); original Projector, linemod intrinsics",
+    "J_pred": "fit of solver-returned pose to input keypoints",
+    "J_gt": "fit of GT pose to input keypoints",
+    "delta_J": "J_gt - J_pred (EXP018 corrected sign, NOT re-inverted); delta_J > 0 <=> J_pred < J_gt <=> returned pose fits input keypoints strictly better than the correct pose (objective ambiguity signal)"
+  },
+  "flip": {
+    "thresholds_deg": [
+      90.0,
+      120.0,
+      150.0,
+      170.0
+    ],
+    "primary_gt_deg": 150.0,
+    "source": "EXP016/017 definition reused"
+  },
+  "clean_subset": "CLEAN18 = ALL20 minus color_00026.png and color_00027.png (fixed from EXP018/019 before any EXP020 result; result-independent; ALL20 and CLEAN18 BOTH always reported",
+  "pathological_policy": {
+    "solver_divergence": "J_pred > 100 px or official reproj > 100 px -> SOLVER_DIVERGENCE flag; reported separately, never read as a normal phase transition",
+    "catastrophic_keypoint": "median input keypoint error > 100 px -> CATASTROPHIC_KEYPOINT flag (real-residual conds)"
+  },
+  "d0_d1_placement": {
+    "d0_median_per_image_rms_px": 3.421882743327065,
+    "d1_median_per_image_rms_px": 2.4234698777666948,
+    "note": "real residual RMS placement anchors, numpy ONLY pre-PnP; D1 anchor asserted == EXP019 frozen config (<1e-3); real D0/D1 are also run DIRECTLY as gate conditions C1/C2 (no modification)",
+    "known_caveat": "D0 median RMS (3.42 px) > D1 (2.42 px) while D0 flips LESS (4 vs 14 at >90deg): per protocol section 22 this is recorded as \"magnitude is a major driver but not the sole determinant\"; geometry mining stays CLOSED"
+  },
+  "gate": {
+    "c0": "GT keypoints: flips 0/20 at all thresholds, max rot < 1e-3 deg, max official reproj < 1e-2 px",
+    "c1_c2": "D0/D1 real keypoints: flips exact vs EXP017 (4/20, 14/20 at >90deg) + rot<1e-3/reproj<1e-3/trans<1e-2 + poses bit-match EXP016 npz (<1e-9) + J_pred/J_gt match EXP018 objective_oracle.csv (<1e-4); SIG_S000 additionally asserted per-image identical to C0_gt",
+    "on_failure": "STOP (exit 1), no synthetic run, no interpretation"
+  },
+  "decision_rules_pre_registered": {
+    "primary": "CLEAN18 flip150 rate vs ACTUAL per-condition RMS (mean over images); ALL20 reported alongside; descriptive statistics and simple finite differences ONLY (protocol section 18: no model fitting, no change-point optimization)",
+    "transition_diagnostic": "delta_flip150[k] = rate[k+1] - rate[k] over the 12 ordered levels; jump_max = max over adjacent pairs; transition pair = argmax; same for P(delta_J>0) (delta_P_RA)",
+    "GO_A": "clear transition: ALL of (i) jump_max >= 0.20 on CLEAN18 flip150 (>= ~4/18 images within one step); (ii) delta_J sync: median_delta_J non-decreasing across >= 9 of 11 adjacent steps AND delta_P_RA across the transition pair >= +0.10; (iii) not 1-2 image driven: >= 3 images have first_sigma_flip150 inside the transition pair (CLEAN18 images; SOLVER_DIVERGENCE events not counted as drivers); (iv) placement: real D1 median per-image RMS within [lower_sigma - 0.5, upper_sigma + 0.5] of the transition pair. Conclusion: residual-magnitude-dependent pose-stability transition in the original PVNet PnP pipeline",
+    "GO_B": "smooth degradation: flip150(sigma_max) >= flip150(sigma_min) + 0.30 overall (dose-response exists) but GO_A criteria fail. Conclusion: stability degrades continuously; NO threshold wording",
+    "GO_C": "magnitude insufficient: otherwise (weak/inconsistent relation). STOP; no geometry mining restart; revisit higher-level keypoint configuration / object geometry",
+    "statistics_discipline": "n=20: NO significance claims, NO universal/object-independent/dataset-independent/solver-independent threshold wording; diagnostic evidence on the fixed 20-image OCC set only"
+  },
+  "forbidden": "no solver/flag/threshold/seed/GT/intrinsics/3D-points/image-set change; no sigma level added post hoc; no geometry study (EXP019 closed); config frozen BEFORE any PnP (protocol sections 7/28)",
+  "runtime_budget": "CPU < 5 min target; abort-and-report if solver modification would ever be needed"
+}

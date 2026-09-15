@@ -1,0 +1,7 @@
+{
+  "gate_ok": true,
+  "c0_flips": 0,
+  "c1_flips_gt90": 4,
+  "c2_flips_gt90": 14,
+  "checks": "flips+rot+reproj+trans vs EXP017; poses bit-match EXP016 npz; oracle J vs EXP018"
+}

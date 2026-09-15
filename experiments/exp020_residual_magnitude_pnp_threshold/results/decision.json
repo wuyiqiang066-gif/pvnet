@@ -1,0 +1,113 @@
+{
+  "gate_ok": true,
+  "decision": "GO-B",
+  "jump_max_clean18": 0.2778,
+  "transition_pair_nominal_sigma": [
+    0.75,
+    1.0
+  ],
+  "transition_pair_actual_rms": [
+    1.0543,
+    1.4058
+  ],
+  "drivers_first_flip_in_pair": [
+    "color_00032.png",
+    "color_00036.png",
+    "color_00038.png",
+    "color_00039.png",
+    "color_00040.png"
+  ],
+  "divergence_flagged_in_pair": [
+    "color_00034.png",
+    "color_00043.png"
+  ],
+  "all20_jump_max": 0.25,
+  "all20_jump_pair": [
+    0.75,
+    1.0
+  ],
+  "criteria": {
+    "i_jump_max_ge_020": true,
+    "iia_median_dJ_mono_steps": "11/11",
+    "iia_median_dJ_mono": true,
+    "iib_delta_P_RA_pair": -0.2778,
+    "iib_delta_P_RA_ge_010": false,
+    "iii_n_drivers_in_pair": 5,
+    "iii_not_1_2_image_driven": true,
+    "iv_d1_rms_in_window": false
+  },
+  "overall_rise_025_to_400": 0.6111,
+  "flips_clean18_by_sigma": {
+    "SIG_S000": 0.0,
+    "SIG_S025": 0.0,
+    "SIG_S050": 0.0,
+    "SIG_S075": 0.1111,
+    "SIG_S100": 0.3889,
+    "SIG_S125": 0.5,
+    "SIG_S150": 0.5556,
+    "SIG_S175": 0.5556,
+    "SIG_S200": 0.5556,
+    "SIG_S250": 0.5556,
+    "SIG_S300": 0.6111,
+    "SIG_S400": 0.6111
+  },
+  "flips_all20_by_sigma": {
+    "SIG_S000": 0.0,
+    "SIG_S025": 0.0,
+    "SIG_S050": 0.0,
+    "SIG_S075": 0.15,
+    "SIG_S100": 0.4,
+    "SIG_S125": 0.5,
+    "SIG_S150": 0.55,
+    "SIG_S175": 0.6,
+    "SIG_S200": 0.6,
+    "SIG_S250": 0.6,
+    "SIG_S300": 0.65,
+    "SIG_S400": 0.65
+  },
+  "d0_d1_placement": {
+    "d0_median_rms": 3.421882743327065,
+    "d1_median_rms": 2.4234698777666948,
+    "nearest_level_d0": "SIG_S300",
+    "nearest_flip150_clean18_d0": 0.6111,
+    "nearest_level_d1": "SIG_S250",
+    "nearest_flip150_clean18_d1": 0.5556,
+    "real_C1_D0_flip150": 0.1,
+    "real_C2_D1_flip150": 0.6,
+    "real_C1_D0_flip150_clean18": 0.1111,
+    "real_C2_D1_flip150_clean18": 0.6111,
+    "d1_rms_inside_transition_window": false
+  },
+  "margin_classes_clean18": {
+    "early (<=1.0 px)": [
+      "color_00032.png",
+      "color_00034.png",
+      "color_00036.png",
+      "color_00038.png",
+      "color_00039.png",
+      "color_00040.png",
+      "color_00043.png"
+    ],
+    "late (>2.5 px)": [
+      "color_00025.png"
+    ],
+    "middle (1.25-2.5 px)": [
+      "color_00024.png",
+      "color_00028.png",
+      "color_00042.png"
+    ],
+    "never (NA at sigma<=4.0)": [
+      "color_00029.png",
+      "color_00030.png",
+      "color_00031.png",
+      "color_00033.png",
+      "color_00035.png",
+      "color_00037.png",
+      "color_00041.png"
+    ]
+  },
+  "pathological_note": "color_00026/27 kept in ALL20 everywhere; CLEAN18 fixed a priori; divergence events flagged per row",
+  "plots": "2 figures written",
+  "rules": "pre-registered in config.json; descriptive statistics only",
+  "rationale": "CLEAN18 flip150 vs actual RMS: jump_max +0.28 at pair [0.75, 1.0] px (nominal); criteria {'i_jump_max_ge_020': True, 'iia_median_dJ_mono_steps': '11/11', 'iia_median_dJ_mono': True, 'iib_delta_P_RA_pair': -0.2778, 'iib_delta_P_RA_ge_010': False, 'iii_n_drivers_in_pair': 5, 'iii_not_1_2_image_driven': True, 'iv_d1_rms_in_window': False}; overall rise sigma0.25->4.0 +0.61. GO-A criteria NOT all met; overall dose-response present without a qualifying knee -> GO-B."
+}
