@@ -1,0 +1,97 @@
+{
+  "exp": "exp021_object_consistent_vector_field",
+  "mode": "one-shot minimal hypothesis test (NOT a method-development experiment)",
+  "question": "does explicitly modeling a SHARED object-level latent state that jointly constrains all K keypoint direction fields (cross-keypoint structural coupling) recover OCC direction error where EXP009/010/011 post-hoc aggregations and EXP012's kp-independent decoder could not, under the EXP012 in-sample fitting protocol?",
+  "hypothesis": "PVNet regresses the K keypoint direction fields approximately independently per pixel; the K fields share one object-level geometric state; making that state explicit and shared across the K readouts reduces correlated direction errors under occlusion.",
+  "motivation_from_repo": {
+    "EXP005": "OCC degradation is NOT vote-count: equal-count LIN still 1.8x better (1.61 vs 2.90 px); degradation monotone toward occlusion boundary",
+    "EXP006": "the degraded axis is DIRECTION (LIN 2.969 deg vs OCC 5.121 deg, unit space); magnitude excluded; degradation concentrated in kp2/kp3/kp7",
+    "EXP008": "oracle context recovers the error (global oracle 0.001 deg; local r=3 0.569 deg) -> information present, representation-limited",
+    "EXP009": "frozen kp-independent local residual: LIN +5.5% but OCC -25.7% (STOP)",
+    "EXP010": "validity-aware local selection 3.2x WORSE than blind local aggregation (STOP)",
+    "EXP011": "predicted-ray global aggregation only +3.5% OCC (STOP-object-level)",
+    "EXP012": "kp-independent 3x3->1x1 decoder on frozen F: OCC +21.1% in-sample (GO-A) => capacity matters, but the readout is still 9 independent fields with NO shared object state",
+    "EXP013": "the D1 improvement generalizes to held-out images (+19.83%)"
+  },
+  "objects": [
+    "cat only (first round tests mechanism existence, not object generality)"
+  ],
+  "data": {
+    "images": "the EXP005-012 fixed deterministic pool: 20 LINEMOD cat val + 20 OCC cat test",
+    "ids_source": "experiments/exp005_visibility_diagnosis/results/image_ids.json (asserted in-run)",
+    "training_set == evaluation_set": "yes, by protocol (in-sample capacity/mechanism probe, EXP012 convention); generalization is NOT this experiment's question (that was EXP013's)",
+    "augment": false,
+    "n_img": 20,
+    "kp_expected": 9,
+    "seed": 0
+  },
+  "conditions": {
+    "A": "original PVNet vertex head convraw[3] (frozen 199.pth), NO training (task spec section 8: 'do not retrain the baseline')",
+    "B": "OCVF: v'_k(p) = normalize(v0_k(p) + dV_k(p)) where v0 = original frozen vertex output, dV from the object-consistency module; ONLY the module is trained",
+    "shared": "identical checkpoint, identical images, identical seed, identical evaluation code path, identical voting, identical pool definitions; segmentation path and trunk untouched and frozen"
+  },
+  "architecture": {
+    "frozen": "ResNet18_8s trunk + conv8s/4s/2s + convraw incl. original 1x1 vertex head + segmentation head (eval mode, no grad, BN stats untouched)",
+    "shared_feature": "F = convraw[0:3](cat(fm, x)) (1,32,H,W), EXP009/012 verbatim",
+    "module": {
+      "object_latent": "Z = mean of F over PREDICTED foreground (argmax seg == 1); z = Linear(32->64)(Z)",
+      "queries": "9 learnable query embeddings q_k in R^64, init N(0, 0.02^2)",
+      "context": "c_k = Linear(64->64)->LeakyReLU(0.1)->Linear(64->64)([q_k; z]) \u2014 SHARED weights across k",
+      "residual": "dV_k(p) = Conv1x1(64->2)( LeakyReLU(0.1)( Conv1x1(96->64)( [F(p); c_k] ) ) ) \u2014 SHARED conv weights across all 9 keypoints (NOT 9 independent heads); final conv ZERO-initialized (EXP007-trap control: at init B == A exactly)",
+      "config_head": "chat = Linear(64->18)(z) reshaped (9,2) px; weight ZERO-init, bias init = image center (W/2, H/2) per keypoint",
+      "forbidden": "no Transformer, no attention, no graph network, no BN, no multi-scale, no cross-attention; input to module is ONLY (F, predicted seg) \u2014 no GT keypoints, no GT pose, no GT visibility mask, no GT directions"
+    }
+  },
+  "losses": {
+    "L_dir": "lib.utils.net_utils.smooth_l1_loss(normalize(v0 + dV), dataset GT vertex targets, fg vertex weights, normalize=True) \u2014 the ORIGINAL PVNet direction supervision, EXP012 verbatim formula; GT used only as training TARGET (allowed); model input never sees GT",
+    "L_conf": "(1/D) * mean_k ||chat_k - gt_kp_k||_2, D = sqrt(H^2 + W^2); trains the configuration head so chat is a meaningful object-level keypoint-configuration hypothesis; GT keypoints are the TARGET, never the input",
+    "L_struct": "mean over (fg pixels p, k) with |gt_kp_k - p| >= 1px AND |chat_k - p| >= 1px of [1 - cos(v'_k(p), normalize(chat_k - p))]; WHY this is cross-keypoint coupling: all 9 fields are pulled toward ONE configuration hypothesis chat predicted from the SINGLE shared object latent z \u2014 the fields cannot satisfy it independently; degenerate solution 'ignore chat' is possible in principle and is exactly what criterion C3 tests",
+    "total": "L = L_dir + 1.0 * L_conf + 1.0 * L_struct (weights fixed BEFORE the run; no tuning allowed)",
+    "leakage_check": "no GT tensor is an input anywhere; runtime verification in-run (see gates)"
+  },
+  "training": {
+    "protocol": "EXP012 in-sample convention: OCVF-LIN fitted on the 20 LIN images and evaluated on the same 20; OCVF-OCC fitted on the 20 OCC images and evaluated on the same 20",
+    "budget": "5 epochs (HARD CAP), image-level batch=1 (module needs whole-image pooling), Adam lr=1e-3 on module params only, seed 0 re-seeded per fit",
+    "stopping": "final state used; no early stopping, no checkpoint selection, no loss-based selection",
+    "debug_policy": "one implementation-bug fix allowed (loss NaN / divergence / collapse); after fix, rerun from scratch ONCE; no lr sweep, no loss-weight sweep, no architecture change; if it still fails -> STOP"
+  },
+  "metrics": {
+    "M1_M5_direction": "EXP006/012 pool (visible fg pixels with |K-p|>=1px, 9 kps pooled), angle between unit pred and unit GT (deg): mean/median/p90 per split; identical code to EXP012 evaluate()",
+    "M6_consistency": {
+      "definition": "GT-free ray-coherence metric. For image i, keypoint k: rays u_j = unit field at eligible fg pixels p_j (pool: fg & |gt_kp_k - p_j| >= 1px; GT used ONLY for pool selection, matching the EXP006 pool convention). Configuration hypothesis = per-kp least-squares ray-intersection point c_k: solve [n*I - sum(u u^T)] c = sum(p - u (u.p)) (+1e-6*n ridge). Per-ray residual d_j = |det(u_j, c_k - p_j)| (perpendicular distance, px). Per (i,k): median d_j. Per image: median over the 9 kps. Per split: mean/median/p90 over 20 images. Degenerate (n < 50 or normal-matrix cond > 1e12) excluded and counted.",
+      "interpretation": "lower = the 9 direction fields are better explained by a single coherent keypoint configuration; EXP005 already used the LS ray-intersection estimator as its counterfactual estimator",
+      "primary_aggregate": "per-split MEDIAN of per-image median-over-k"
+    },
+    "M7_keypoints": "original ransac_voting_layer_v3 (CUDA) on the A field (raw v0, original pipeline) and the B field (normalize(v0+dV)); mask = argmax seg (identical for A and B); seed re-applied before EVERY voting call (EXP014/015 verbatim); ROUND_HYP=128, INLIER_THRESH=0.99, MAX_NUM=100; keypoint error = ||kp_pred - gt_kp|| px; per-split pooled median over 20x9=180 errors (EXP015 convention)",
+    "field_roughness": "EXP012 smoothing check (neighbor variation of unit field), reported, NOT a criterion",
+    "occ_proximity_bands": "0-5 / 5-20 / 20+ px (EXP005/012 definitions), reported, NOT a criterion"
+  },
+  "gates_abort_if_failed": {
+    "G1": "A direction metrics reproduce EXP006: |LIN-2.969|<0.05, |OCC-5.121|<0.05, pooled counts exactly 440940/250033",
+    "G2": "A full-image L_dir at init matches EXP012 references: LIN 0.002869, OCC 0.008945 (tol 1e-4)",
+    "G3": "init identity: B(at init) == A: max|v'_init - v0_hat| == 0 and voting keypoints |diff| < 1e-3 px (voting is scale-invariant by construction; verified in-run)",
+    "G4": "no-GT-input verification: module forward signature is exactly (feat, seg); repeated forward with deliberately corrupted GT tensors (vertex_gt, gt_kps, pose, mask_gt) produces BIT-IDENTICAL v'; passed before any training",
+    "G5": "A voting keypoint pooled median reproduces EXP015: LIN 1.111 +/- 0.05 px, OCC 3.150 +/- 0.05 px"
+  },
+  "decision_criteria": {
+    "C1": "OCC direction MEAN improvement = (A_occ - B_occ)/A_occ >= 0.10 (M1)",
+    "C2": "LIN direction degradation = (B_lin - A_lin)/A_lin <= 0.05 (M4)",
+    "C3": "structural consistency clearly better: (A_occ - B_occ)/A_occ >= 0.05 on M6 OCC median AND (B_lin - A_lin)/A_lin <= 0.05 on M6 LIN median",
+    "C4": "OCC voted keypoint pooled median no clear degradation: B <= 1.05 * A (M7)",
+    "rule": "GO iff C1 AND C2 AND C3 AND C4; otherwise STOP (no exception, no 'partially satisfied continues'). If 1-3 criteria hold but not all: decision is STOP, profile reported as MIXED (partial satisfaction), framed strictly as a failed hypothesis test. No second seed, no more epochs, no data increase, no loss/architecture change, no EXP022."
+  },
+  "exp012_distinctness_requirement": "the ONLY mechanistic difference from EXP012's D1 must be the shared object latent z and the shared-across-keypoint residual readout (cross-keypoint coupling). If the trained module effectively behaves as 9 independent context heads (i.e. C3 fails and the coupling pathway is unused), the implementation does NOT qualify as a valid OCVF test and this must be stated in the REPORT.",
+  "voting_input_B": "RAW refined field (v0 + dV) is fed to voting \u2014 voting kernels are scale-invariant w.r.t. the direction field (in-run check: raw vs unit field voting differs 3.63e-02 px = float-noise amplified by RANSAC discrete selection); direction metrics and all losses use normalize(v0 + dV) (task-spec form); zero-init control then makes B's voting BIT-IDENTICAL to A's at init",
+  "run_history": "run 1 aborted at gate G3 (voting identity): the gate compared voting on raw v0 vs unit-normalized v0 with a 1e-3 px tolerance, but float32 rounding through the RANSAC discrete selection gives 3.63e-02 px \u2014 a gate-design flaw, hit BEFORE any training or fitting; fix = feed B's RAW field to voting (bit-identical at init); run 2 restarted from scratch; no loss/architecture/epoch change",
+  "deviations": {
+    "D1": "A is evaluated frozen (no fitting) per task spec section 8; 'identical training budget' is implemented as: B uses exactly the EXP012 5-epoch fitting budget, A uses none \u2014 this is the task's own definition of the A condition",
+    "D2": "training is image-level (batch=1, 20 steps/epoch) instead of EXP012's pixel-minibatch (4096): the OCVF module requires whole-image masked pooling for z; epoch budget identical (5)",
+    "D3": "two module instances (OCVF-LIN, OCVF-OCC), one per split, fitted independently \u2014 EXP012's D1-LIN/D1-OCC convention, keeps per-split domain budget identical to EXP012"
+  },
+  "outputs": [
+    "REPORT.md",
+    "results/",
+    "image_ids.json"
+  ],
+  "forbidden_aftermath": "if not GO: no 10-epoch rerun, no second seed, no loss swap, no architecture swap, no attention/graph, no third object, no data increase, no EXP022"
+}

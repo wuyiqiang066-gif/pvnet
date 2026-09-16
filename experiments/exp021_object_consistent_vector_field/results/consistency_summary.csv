@@ -1,0 +1,5 @@
+split,cond,median_px,mean_px,p90_px,n_degenerate_kp
+linemod,A,0.4442,0.4387,0.4862,0
+linemod,B,5.6418,5.7013,6.7168,0
+occ,A,0.4320,0.4788,0.6608,0
+occ,B,5.3541,5.0760,5.8695,0

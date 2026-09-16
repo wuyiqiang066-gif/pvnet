@@ -1,0 +1,5 @@
+split,cond,pooled_median_px,pooled_mean_px,p90_px
+linemod,A,1.2987,1.6509,3.5158
+linemod,B,83.4084,88.3495,122.7747
+occ,A,2.3900,2.9593,5.2157
+occ,B,74.5926,83.0988,130.3908
